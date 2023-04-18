@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-// OTP
+// Email Verification
 Route::post('/verifyotp', [OtpController::class, 'verification']);
 Route::post('/expiredotp', [OtpController::class, 'expiredverification']);
 Route::post('/resendotp', [OtpController::class, 'resend']);

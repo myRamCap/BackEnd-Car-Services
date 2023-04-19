@@ -25,10 +25,11 @@ class OtpController extends Controller
             // $getting_token = Verifytoken::where('token', $get_token->token)->orderBy('created_at', 'desc')->first();
             // $getting_token->delete();
             // return response("" ,204);
-            return response($get_token);
+            $user = User::where('email', $get_token->email);
+            return response($user);
         } else {
             return response([
-                'message' => 'Incorrect OTP'
+                'message' => 'Invalid verification code'
             ], 422);
         }
     }

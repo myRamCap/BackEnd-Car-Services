@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('barangay');
             $table->string('municipality');
             $table->string('province');
-            $table->decimal('longitude', 3, 15);
-            $table->decimal('latitude', 3, 15);
+            $table->decimal('longitude', 16, 15);
+            $table->decimal('latitude', 16, 15);
             $table->string('branch_manager_id');
             $table->string('image')->nullable();
             $table->timestamps();

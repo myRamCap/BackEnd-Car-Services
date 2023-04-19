@@ -17,7 +17,7 @@
     <meta name="format-detection" content="address=no"> <!-- disable auto address linking in iOS -->
     <meta name="format-detection" content="email=no"> <!-- disable auto email linking in iOS -->
     <meta name="author" content="Simple-Pleb.com">
-    <title>{{ __('pleb.mail.Verify Title') }} | {{ config('app.name') }}</title>
+    <title><?php echo e(__('pleb.mail.Verify Title')); ?> | <?php echo e(config('app.name')); ?></title>
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -111,13 +111,7 @@
                                                 <!--[if (gte mso 9)|(IE)]><table border="0" cellpadding="0" cellspacing="0" dir="rtl"><tr><td><![endif]-->
 
                                                 <!-- column -->
-                                                {{--<table border="0" align="right" cellpadding="0" cellspacing="0" role="presentation" class="row" width="280" style="width:280px;max-width:280px;">
-                                                    <tr>
-                                                        <td class="center-text" align="right" height="22" style="height: 22px;">
-                                                            <a href="#"  style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:12px;line-height:16px;font-style:italic;font-weight:400;color:#b5beff;text-decoration:none;letter-spacing:0px;">View this email in your browser</a>
-                                                        </td>
-                                                    </tr>
-                                                </table>--}}
+                                                
                                                 <!-- column -->
 
                                                 <!--[if (gte mso 9)|(IE)]></td><td><![endif]-->
@@ -149,7 +143,7 @@
                             </tr>
                             <tr  >
                                 <td align="center" class="center-text">
-                                    <img style="width:190px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Email-2_Intro.png') }}" width="190" border="0"       alt="intro">
+                                    <img style="width:190px;border:0px;display: inline!important;" src="<?php echo e(asset('assets/img/emails/Email-2_Intro.png')); ?>" width="190" border="0"       alt="intro">
                                 </td>
                             </tr>
                             <tr  >
@@ -159,7 +153,8 @@
                                 <td class="center-text"  align="center" style="font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:42px;line-height:52px;font-weight:400;font-style:normal;color:#FFFFFF;text-decoration:none;letter-spacing:0px;">
 
                                     <div  >
-                                        {{ __('Verify Your Email Account') }}
+                                        <?php echo e(__('Verify Your Email Account')); ?>
+
                                     </div>
 
                                 </td>
@@ -171,7 +166,8 @@
                                 <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:16px;line-height:26px;font-weight:300;font-style:normal;color:#FFFFFF;text-decoration:none;letter-spacing:0px;">
 
                                     <div  >
-                                        {{ __('Please use below OTP to login') }}
+                                        <?php echo e(__('Please use below OTP to login')); ?>
+
                                     </div>
 
                                 </td>
@@ -192,7 +188,7 @@
                                                         <td align="center" height="50" style="height:50px;">
                                                 <![endif]-->
 
-                                                <p    style="font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:46px;line-height:19px;font-weight:700;font-style:normal;color:#000000;text-decoration:none;letter-spacing:0px;padding: 20px 50px 20px 50px;display: inline-block;"><span>{{ $validToken ?? '123445' }}</span></p>
+                                                <p    style="font-family:'Roboto Slab',Arial,Helvetica,sans-serif;font-size:46px;line-height:19px;font-weight:700;font-style:normal;color:#000000;text-decoration:none;letter-spacing:0px;padding: 20px 50px 20px 50px;display: inline-block;"><span><?php echo e($validToken ?? '123445'); ?></span></p>
 
                                                 <!--[if (gte mso 9)|(IE)]>
                                                 </td>
@@ -235,56 +231,56 @@
                                                 <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                     <tr>
                                                         <td   class="rwd-on-mobile" align="center" valign="middle" height="36" style="height: 36px;">
-                                                            @if( config('pleb.mail.instagram_url') != '')
+                                                            <?php if( config('pleb.mail.instagram_url') != ''): ?>
                                                                 <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                                     <tr>
                                                                         <td width="10"></td>
                                                                         <td align="center">
-                                                                            <a href="{{ config('pleb.mail.facebook_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Facebook.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                            <a href="<?php echo e(config('pleb.mail.facebook_url')); ?>"><img style="width:36px;border:0px;display: inline!important;" src="<?php echo e(asset('assets/img/emails/Facebook.png')); ?>" width="36" border="0"       alt="icon"></a>
                                                                         </td>
                                                                         <td width="10"></td>
                                                                     </tr>
                                                                 </table>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td   class="rwd-on-mobile" align="center" valign="middle" height="36" style="height: 36px;">
-                                                            @if( config('pleb.mail.instagram_url') != '')
+                                                            <?php if( config('pleb.mail.instagram_url') != ''): ?>
                                                                 <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                                     <tr>
                                                                         <td width="10"></td>
                                                                         <td align="center">
-                                                                            <a href="{{ config('pleb.mail.instagram_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Instagram.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                            <a href="<?php echo e(config('pleb.mail.instagram_url')); ?>"><img style="width:36px;border:0px;display: inline!important;" src="<?php echo e(asset('assets/img/emails/Instagram.png')); ?>" width="36" border="0"       alt="icon"></a>
                                                                         </td>
                                                                         <td width="10"></td>
                                                                     </tr>
                                                                 </table>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td   class="rwd-on-mobile" align="center" valign="middle" height="36" style="height: 36px;">
-                                                            @if( config('pleb.mail.twitter_url') != '')
+                                                            <?php if( config('pleb.mail.twitter_url') != ''): ?>
                                                                 <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                                     <tr>
                                                                         <td width="10"></td>
                                                                         <td align="center">
-                                                                            <a href="{{ config('pleb.mail.twitter_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Twitter.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                            <a href="<?php echo e(config('pleb.mail.twitter_url')); ?>"><img style="width:36px;border:0px;display: inline!important;" src="<?php echo e(asset('assets/img/emails/Twitter.png')); ?>" width="36" border="0"       alt="icon"></a>
                                                                         </td>
                                                                         <td width="10"></td>
                                                                     </tr>
                                                                 </table>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </td>
                                                         <td   class="rwd-on-mobile" align="center" valign="middle" height="36" style="height: 36px;">
-                                                            @if( config('pleb.mail.pinterest_url') != '')
+                                                            <?php if( config('pleb.mail.pinterest_url') != ''): ?>
                                                                 <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                                     <tr>
                                                                         <td width="10"></td>
                                                                         <td align="center">
-                                                                            <a href="{{ config('pleb.mail.pinterest_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Pinterest.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                            <a href="<?php echo e(config('pleb.mail.pinterest_url')); ?>"><img style="width:36px;border:0px;display: inline!important;" src="<?php echo e(asset('assets/img/emails/Pinterest.png')); ?>" width="36" border="0"       alt="icon"></a>
                                                                         </td>
                                                                         <td width="10"></td>
                                                                     </tr>
                                                                 </table>
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -301,7 +297,8 @@
                                 <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:14px;line-height:24px;font-weight:400;font-style:normal;color:#6e6e6e;text-decoration:none;letter-spacing:0px;">
 
                                     <div  >
-                                        {{ config('pleb.mail.street_address') }}
+                                        <?php echo e(config('pleb.mail.street_address')); ?>
+
                                     </div>
 
                                 </td>
@@ -309,14 +306,14 @@
                             <tr  >
                                 <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:14px;line-height:24px;font-weight:400;font-style:normal;color:#6e6e6e;text-decoration:none;letter-spacing:0px;">
 
-                                    <a href="tel:{{ config('pleb.mail.phone_number') }}"    style="color:#6e6e6e;"><span>{{ config('pleb.mail.phone_number') }}</span></a>
+                                    <a href="tel:<?php echo e(config('pleb.mail.phone_number')); ?>"    style="color:#6e6e6e;"><span><?php echo e(config('pleb.mail.phone_number')); ?></span></a>
 
                                 </td>
                             </tr>
                             <tr  >
                                 <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:14px;line-height:24px;font-weight:400;font-style:normal;color:#6e6e6e;text-decoration:none;letter-spacing:0px;">
 
-                                    <a href="mailto:{{ config('pleb.mail.info_email') }}"    style="color:#6e6e6e;"><span>{{ config('pleb.mail.info_email') }}</span></a> - <a href="{{ url('/') }}"    style="color:#6e6e6e;"><span>{{ config('pleb.app_name.name') }}</span></a>
+                                    <a href="mailto:<?php echo e(config('pleb.mail.info_email')); ?>"    style="color:#6e6e6e;"><span><?php echo e(config('pleb.mail.info_email')); ?></span></a> - <a href="<?php echo e(url('/')); ?>"    style="color:#6e6e6e;"><span><?php echo e(config('pleb.app_name.name')); ?></span></a>
 
                                 </td>
                             </tr>
@@ -325,7 +322,7 @@
                             </tr>
                             <tr  >
                                 <td align="center">
-                                @if( config('pleb.mail.play_url') != '' || config('pleb.mail.ios_url') != '' )
+                                <?php if( config('pleb.mail.play_url') != '' || config('pleb.mail.ios_url') != '' ): ?>
                                     <!-- Buttons -->
                                         <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation" class="row" width="100%" style="width:100%;max-width:100%;">
                                             <tr>
@@ -334,11 +331,11 @@
                                                     <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                         <tr  >
                                                             <td align="center">
-                                                                <a href="{{config('pleb.mail.ios_url')}}"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="{{ asset('assets/img/emails/App-Store.png') }}" border="0"  alt="icon"></a>
+                                                                <a href="<?php echo e(config('pleb.mail.ios_url')); ?>"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="<?php echo e(asset('assets/img/emails/App-Store.png')); ?>" border="0"  alt="icon"></a>
                                                             </td>
                                                             <td width="10" style="width: 10px;"></td>
                                                             <td align="center">
-                                                                <a href="{{config('pleb.mail.play_url')}}"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="{{ asset('assets/img/emails/Google-play.png') }}" border="0"  alt="icon"></a>
+                                                                <a href="<?php echo e(config('pleb.mail.play_url')); ?>"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="<?php echo e(asset('assets/img/emails/Google-play.png')); ?>" border="0"  alt="icon"></a>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -347,7 +344,7 @@
                                             </tr>
                                         </table>
                                         <!-- Buttons -->
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                             <tr  >
@@ -373,4 +370,4 @@
 </table>
 
 </body>
-</html>
+</html><?php /**PATH /Users/ramcap/Documents/GitHub/BackEnd-Car-Services/resources/views/emails/welcome.blade.php ENDPATH**/ ?>

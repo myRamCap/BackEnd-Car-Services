@@ -19,7 +19,7 @@ class ServiceResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'details' => $this->details,
-            'image' => $this->image,
+            'image_id' => $this->image_id,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

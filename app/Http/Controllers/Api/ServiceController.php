@@ -17,7 +17,7 @@ class ServiceController extends Controller
     {
          return ServiceResource::collection(
             Service::orderBy('id','desc')->get()
-         );
+         ); 
     }
 
     /**
@@ -25,7 +25,9 @@ class ServiceController extends Controller
      */
     public function store(StoreServiceRequest $request)
     {
-        //
+        $data = $request->validated();
+        $service = Service::create($data);
+        return response(new ServiceResource($service), 201);
     }
 
     /**

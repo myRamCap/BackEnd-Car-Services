@@ -16,7 +16,8 @@ class ServiceController extends Controller
     public function index()
     {
          return ServiceResource::collection(
-            Service::orderBy('id','desc')->get()
+            // Service::orderBy('id','desc')->get()
+            Service::join('services_logos', 'services_logos.id', '=', 'services.id')->orderBy('services.id','desc')->get()
          ); 
     }
 
@@ -41,9 +42,16 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateServiceRequest $request, Service $service)
+    public function update(UpdateServiceRequest $request)
     {
-        //
+        $request->validated();
+
+        $service = Service::find($request->id);
+        $service->name = $request->name;
+        $service->details = $request->details;
+        $service->image_id = $request->image_id;
+        $service->save();
+        return response(new ServiceResource($service), 201);
     }
 
     /**

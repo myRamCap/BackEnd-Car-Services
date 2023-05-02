@@ -134,10 +134,4 @@ class AuthController extends Controller
 
         return response('', 204);
     }
-
-    public function getall() {
-        return UserResource::collection(
-            User::orderBy('id','desc')->get()
-         );
-    }
 }

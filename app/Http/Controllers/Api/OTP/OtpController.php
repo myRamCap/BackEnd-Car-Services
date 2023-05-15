@@ -22,10 +22,11 @@ class OtpController extends Controller
             if ($is_activated) {
                 $removeToken = Verifytoken::where('email', $request->email);
                 $removeToken->delete();
-        
+                
+                $role = $is_activated['role'];
                 $user = $is_activated['first_name']." ".$is_activated['last_name'];
                 $token = $is_activated->createToken('main')->plainTextToken;
-                return response(compact('user','token')); 
+                return response(compact('user','token','role')); 
             } else {
                 $user = User::where('email',$get_email)->where('is_activated', 0)->first(); 
                 $user->is_activated = 1;

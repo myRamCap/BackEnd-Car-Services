@@ -60,7 +60,22 @@ class ServiceCenterController extends Controller
      */
     public function update(UpdateServiceCenterRequest $request, ServiceCenter $serviceCenter)
     {
-        //
+        $request->validated();
+
+        $service_logo = ServiceCenter::find($request->id);
+        $service_logo->name = $request->name;
+        $service_logo->category = $request->category;
+        $service_logo->country = $request->country;
+        $service_logo->house_number = $request->house_number;
+        $service_logo->barangay = $request->barangay;
+        $service_logo->municipality = $request->municipality;
+        $service_logo->province = $request->province;
+        $service_logo->longitude = $request->longitude;
+        $service_logo->latitude = $request->latitude;
+        $service_logo->branch_manager_id = $request->branch_manager_id;
+        $service_logo->image = $request->image;
+        $service_logo->save();
+        return response(new ServiceCenterResource($service_logo), 201);
     }
 
     /**

@@ -11,7 +11,7 @@ class UpdateServiceCenterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class UpdateServiceCenterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|unique:service_centers,name,'.$this->id,
+            'category' => 'required|string',
+            'country' => 'required|string',
+            'house_number' => 'required|string',
+            'barangay' => 'required|string',
+            'municipality' => 'required|string',
+            'province' => 'required|string',
+            'longitude' => 'required|numeric|regex:/^\d{0,4}\.\d{1,15}$/',
+            'latitude' => 'required|numeric|regex:/^\d{0,4}\.\d{1,15}$/',
+            'branch_manager_id' => 'required|integer',
+            'image' => 'string|nullable',
         ];
     }
 }

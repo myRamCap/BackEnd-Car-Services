@@ -11,7 +11,7 @@ class UpdateBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,16 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'customer_id' => 'required|integer:service_centers,name,'.$this->id,
+            'customer_name' => 'required|string',
+            'vehicle_id' => 'required|integer',
+            'services_id' => 'required|integer',
+            'service_center_id' => 'required|integer',
+            'contact_number' => 'string|nullable',
+            'status' => 'required|string',
+            'booking_date' => 'required|string',
+            'time' => 'required|string',
+            'notes' => 'string',
         ];
     }
 }

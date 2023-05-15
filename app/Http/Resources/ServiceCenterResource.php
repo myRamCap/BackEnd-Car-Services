@@ -19,7 +19,7 @@ class ServiceCenterResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'category' => $this->category,
-            'coutry' => $this->coutry,
+            'country' => $this->country,
             'house_number' => $this->house_number,
             'barangay' => $this->barangay,
             'municipality' => $this->municipality,

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('customer_id');
             $table->string('customer_name');
             $table->string('vehicle_name');
             $table->string('chassis_number')->nullable();
@@ -20,7 +21,8 @@ return new class extends Migration
             $table->string('make')->nullable();
             $table->string('model')->nullable();
             $table->integer('year')->nullable();
-            $table->string('image')->nullable();
+            $table->longText('image')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

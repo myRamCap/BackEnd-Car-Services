@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class UserController extends Controller
@@ -14,7 +16,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+ 
+        // return UserResource::collection(
+        //     // Service::orderBy('id','desc')->get()
+        //     User::join('roles', 'roles.id', '=', 'users.role')
+        //             ->orderBy('users.id','desc')->get()
+        //  ); 
     }
 
     /**
@@ -28,9 +35,14 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($id)
     {
-        //
+        return UserResource::collection(
+            User::join('roles', 'roles.id', '=', 'users.role')
+                ->select('users.*', 'roles.name as role_name')
+                ->where('users.role',)
+                ->orderBy('users.id','desc')->get()
+         ); 
     }
 
     /**

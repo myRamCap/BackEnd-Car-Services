@@ -20,3 +20,7 @@ Route::get('/', function () {
 Route::get('/email', function () {
     return view('emails.welcome');
 });
+
+Route::get('/phone', function () {
+    return view('phone');
+});

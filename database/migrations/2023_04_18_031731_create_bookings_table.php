@@ -20,7 +20,8 @@ return new class extends Migration
             $table->bigInteger('service_center_id');
             $table->string('contact_number');
             $table->string('status');
-            $table->string('booking_date')->nullable();
+            $table->date('booking_date');
+            $table->string('time');
             $table->timestamps();
         });
     }

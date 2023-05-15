@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('time_slots', function (Blueprint $table) {
             $table->id();
-            $table->string('service_center_id');
+            $table->bigInteger('service_center_id');
             $table->string('time');
             $table->integer('max_limit');
-            $table->date('date');
             $table->timestamps();
         });
     }

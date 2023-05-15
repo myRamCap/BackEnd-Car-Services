@@ -118,13 +118,14 @@ class AuthController extends Controller
         $get_user->password = $data['password'];
         $get_user->save();
 
+        $role = $get_user['role'];
         $user = $get_user['first_name']." ".$get_user['last_name'];
         $token = $get_user->createToken('main')->plainTextToken;
 
         $removeToken = Verifytoken::where('email', $request->email);
         $removeToken->delete();
 
-        return response(compact('user','token')); 
+        return response(compact('user','token','role')); 
     }
 
     public function logout(Request $request) {

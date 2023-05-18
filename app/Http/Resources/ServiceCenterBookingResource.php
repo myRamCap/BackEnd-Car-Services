@@ -17,8 +17,8 @@ class ServiceCenterBookingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'customer_id' => $this->customer_id,
-            'customer_name' => $this->customer_name,
+            'client_id' => $this->client_id,
+            'client_name' => $this->first_name . " " . $this->last_name,
             'vehicle_id' => $this->vehicle_id,
             'vehicle_name' => $this->vehicle_name,
             'services_id' => $this->services_id,

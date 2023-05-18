@@ -22,8 +22,7 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_id' => 'required|integer:service_centers,name,'.$this->id,
-            'customer_name' => 'required|string',
+            'client_id' => 'required|integer:service_centers,name,'.$this->id,
             'vehicle_id' => 'required|integer',
             'services_id' => 'required|integer',
             'service_center_id' => 'required|integer',
@@ -32,6 +31,13 @@ class UpdateBookingRequest extends FormRequest
             'booking_date' => 'required|string',
             'time' => 'required|string',
             'notes' => 'string',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'client_id' => 'The Client name field is required.',
         ];
     }
 }

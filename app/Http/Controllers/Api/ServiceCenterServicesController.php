@@ -41,9 +41,16 @@ class ServiceCenterServicesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ServiceCenterService $serviceCenterServices)
+    public function show($id)
     {
-        //
+        return ServiceCenterServicesResource::collection(
+            ServiceCenterService::join('services', 'services.id', '=', 'service_center_services.service_id')
+                ->join('services_logos', 'services_logos.id', '=', 'services.image_id')
+                ->select('service_center_services.*', 'services.name', 'services.details', 'services_logos.image_url')
+                ->where('service_center_services.service_center_id', $id)
+                ->orderBy('service_center_services.id','desc')
+                ->get()
+        ); 
     }
 
     /**

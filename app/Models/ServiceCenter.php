@@ -22,6 +22,6 @@ class ServiceCenter extends Model
         'longitude',
         'latitude',
         'branch_manager_id',
-        'image',
+        // 'image',
     ];
 }

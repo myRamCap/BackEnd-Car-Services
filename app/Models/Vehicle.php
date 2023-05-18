@@ -12,8 +12,7 @@ class Vehicle extends Model
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'customer_id',
-        'customer_name',
+        'client_id',
         'vehicle_name',
         'chassis_number',
         'contact_number',

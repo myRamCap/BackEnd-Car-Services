@@ -16,14 +16,20 @@ class VehicleController extends Controller
     public function index()
     {
         return VehicleResource::collection(
-            Vehicle::orderBy('id','desc')->get()
+            // Vehicle::orderBy('id','desc')->get()
+            Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')
+            ->select('vehicles.*', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+            ->orderBy('vehicles.id','desc')->get()
          ); 
     }
 
     public function vehicle($id)
     {
         return VehicleResource::collection(
-            Vehicle::where('customer_id', $id)->orderBy('id','desc')->get()
+            // Vehicle::where('client_id', $id)->orderBy('id','desc')->get()
+            Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')
+            ->select('vehicles.*', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+            ->where('vehicles.client_id', $id)->orderBy('vehicle_name','ASC')->get()
          ); 
     }
 
@@ -48,9 +54,14 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vehicle $vehicle)
+    public function show($id)
     {
-        //
+        return VehicleResource::collection(
+            // Vehicle::where('client_id', $id)->orderBy('id','desc')->get()
+            Vehicle::join('clients', 'clients.id', '=', 'vehicles.client_id')
+            ->select('vehicles.*', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+            ->where('vehicles.client_id', $id)->orderBy('vehicle_name','ASC')->get()
+         ); 
     }
 
     /**
@@ -69,7 +80,7 @@ class VehicleController extends Controller
         $request->validated();
 
         $vehicle = Vehicle::find($request->id);
-        $vehicle->customer_name = $request->customer_name;
+        $vehicle->client_id = $request->client_id;
         $vehicle->vehicle_name = $request->vehicle_name;
         $vehicle->chassis_number = $request->chassis_number;
         $vehicle->contact_number = $request->contact_number;

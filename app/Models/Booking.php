@@ -12,8 +12,7 @@ class Booking extends Model
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'customer_id',
-        'customer_name',
+        'client_id',
         'vehicle_id',
         'services_id',
         'service_center_id',

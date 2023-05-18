@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('contact_number')->unique();
             $table->string('address');
+            $table->boolean('is_activated')->default(0);
+            $table->rememberToken();
             $table->timestamps();
         });
     }

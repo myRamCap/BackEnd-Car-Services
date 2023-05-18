@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\OTP\OtpController;
+use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\ServiceCenterBookingController;
 use App\Http\Controllers\Api\ServiceCenterController;
 use App\Http\Controllers\Api\ServiceCenterServicesController;
@@ -36,7 +38,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('/service_center/services', ServiceCenterServicesController::class);
     Route::resource('/service_center/timeslot', ServiceCenterTimeSlotController::class);
     Route::resource('/service_center/booking', ServiceCenterBookingController::class);
+    Route::resource('/client', ClientController::class);
+    // Route::resource('/booking', BookingController::class);
 
+
+    Route::get('/corporate_account', [UserController::class, 'corporate']);
+    Route::get('/upcomingbooking/{id}', [ServiceCenterBookingController::class, 'upcoming']);
+    Route::get('/records/{id}', [ServiceCenterBookingController::class, 'records']);
+    Route::get('/servicecenters', [ServiceCenterController::class, 'getall']);
+    Route::get('/roles', [RolesController::class, 'index']);
     Route::get('/service_center/timeslot/{id}/{year}/{month}/{day}',[ServiceCenterTimeSlotController::class, 'timeslot']);
     Route::get('/service_center/vehicle/{id}', [VehicleController::class, 'vehicle']);
     // Route::get('/servicecenter/services', [ServiceCenterServicesController::class, 'test']);

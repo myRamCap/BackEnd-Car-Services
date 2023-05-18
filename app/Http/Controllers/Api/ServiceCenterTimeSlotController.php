@@ -52,10 +52,10 @@ class ServiceCenterTimeSlotController extends Controller
             DB::select("SELECT id, service_center_id, time, max_limit, created_at  FROM time_slots
                         WHERE NOT EXISTS (
                             SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time 
-                            FROM bookings a INNER JOIN service_center_services b ON a.services_id = b.id
+                            FROM bookings a INNER JOIN service_center_services b ON a.services_id = b.service_id
                             WHERE time_slots.time >= a.time  AND time_slots.time < addtime(a.time, b.estimated_time) 
                             AND a.service_center_id = $id AND a.booking_date =  '$date'
-                        ) order by time ASC", )
+                        ) order by time ASC" )
         );
  
         // return ServiceCenterTimSlotResource::collection(
@@ -72,9 +72,11 @@ class ServiceCenterTimeSlotController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TimeSlot $timeSlot)
+    public function show($id)
     {
-        //
+        return ServiceCenterTimSlotResource::collection(
+            TimeSlot::where('service_center_id', $id)->orderBy('id','desc')->get()
+        );
     }
 
     /**

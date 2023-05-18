@@ -17,8 +17,8 @@ class VehicleResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'customer_id' => $this->customer_id,
-            'customer_name' => $this->customer_name,
+            'client_id' => $this->client_id,
+            'client_name' => $this->first_name . " " . $this->last_name,
             'vehicle_name' => $this->vehicle_name,
             'chassis_number' => $this->chassis_number,
             'contact_number' => $this->contact_number,

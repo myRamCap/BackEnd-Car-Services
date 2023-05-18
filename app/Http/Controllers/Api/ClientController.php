@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientLoginRequest;
 use App\Http\Requests\ClientRegisterRequest;
 use App\Http\Requests\ClientVerifyRequest;
+use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Models\ClientToken;
 use Illuminate\Http\Request;
@@ -14,6 +15,19 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
+    public function index() {
+        return ClientResource::collection(
+            Client::orderBy('id','desc')->get()
+            // ServiceCenter::join('services_logos', 'services_logos.id', '=', 'services.id')->orderBy('services.id','desc')->get()
+         ); 
+    }
+
+    public function show($id) {
+        return ClientResource::collection(
+            Client::orderBy('id','desc')->where('id', $id)->get()
+         ); 
+    }
+
     public function otp_send($contact_number) {
         $validToken = rand(100000, 999999);
         $get_token = new ClientToken();
@@ -88,20 +102,25 @@ class ClientController extends Controller
         $check_token = ClientToken::where('token',$request->token)->where('contact_number',$request->contact_number)->where('is_activated', 0)->where('is_expired', 0)->first();
         $is_activated = Client::where('contact_number',$request->contact_number)->first(); 
 
-        return($check_token);
+        // return($check_token);
 
-        // if ($check_token) {
-        //     $check_token->is_activated = 1;
-        //     $check_token->save();
+        if ($check_token) {
+            $check_token->is_activated = 1;
+            $check_token->save();
             
-        //     $user = $is_activated['first_name']." ".$is_activated['last_name'];
-        //     $token = $is_activated->createToken('main')->plainTextToken;
-        //     return response(compact('user','token')); 
-        // } else {
-        //     return response([
-        //         'message' => 'Invalid verification code'
-        //     ], 422);
-        // }
+            $user_id = $is_activated['id'];
+            $user = $is_activated['first_name']." ".$is_activated['last_name'];
+            $data = $is_activated;
+            $token = $is_activated->createToken('main')->plainTextToken;
+            // $is_activated->remember_token = $token;
+            // $is_activated->save();
+
+            return response(compact('user','token', 'user_id', 'data')); 
+        } else {
+            return response([
+                'message' => 'Invalid verification code'
+            ], 422);
+        }
     }
 
     public function login(Request $request) {

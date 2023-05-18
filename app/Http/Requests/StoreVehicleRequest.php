@@ -22,7 +22,7 @@ class StoreVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_name' => 'required|string',
+            'client_id' => 'required|integer',
             'vehicle_name' => 'required|string',
             'chassis_number' => 'nullable|string',
             'contact_number' => 'required|string',
@@ -31,6 +31,13 @@ class StoreVehicleRequest extends FormRequest
             'year' => 'nullable|integer',
             'image' => 'string|nullable',
             'notes' => 'string|nullable',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'client_id' => 'The Client name field is required.',
         ];
     }
 }

@@ -22,7 +22,7 @@ class UpdateVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customer_name' => 'required|string:vehicles,customer_name,'.$this->id,
+            'client_id' => 'required|integer:vehicles,client_id,'.$this->id,
             'vehicle_name' => 'required|string',
             'chassis_number' => 'nullable|string',
             'contact_number' => 'required|string',

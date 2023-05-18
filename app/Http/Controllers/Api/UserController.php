@@ -12,6 +12,14 @@ use App\Models\User;
 class UserController extends Controller
 {
     /**
+     * Display a listing of the role corporate account.
+     */
+    public function corporate() {
+        $corporate = User::where('role_id', 2)->get();
+        return $corporate;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
@@ -20,7 +28,7 @@ class UserController extends Controller
         // return UserResource::collection(
         //     // Service::orderBy('id','desc')->get()
         //     User::join('roles', 'roles.id', '=', 'users.role')
-        //             ->orderBy('users.id','desc')->get()
+        //     ->orderBy('users.id','desc')->get()
         //  ); 
     }
 
@@ -29,7 +37,10 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-        //
+        $data = $request->validated();
+        $data['password'] = bcrypt('welcome@123');
+        $service_center = User::create($data);
+        return response(new UserResource($service_center), 201);
     }
 
     /**
@@ -37,12 +48,21 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return UserResource::collection(
-            User::join('roles', 'roles.id', '=', 'users.role')
-                ->select('users.*', 'roles.name as role_name')
-                ->where('users.role',)
+        if ($id == 1) {
+            return UserResource::collection(
+                User::join('roles', 'roles.id', '=', 'users.role_id')
+                ->select('users.*', 'roles.name')
                 ->orderBy('users.id','desc')->get()
-         ); 
+            ); 
+        } else {
+            return UserResource::collection(
+                User::join('roles', 'roles.id', '=', 'users.role')
+                    ->select('users.*', 'roles.name as role_name')
+                    // ->where('users.role',)
+                    ->orderBy('users.id','desc')->get()
+             ); 
+        }
+ 
     }
 
     /**
@@ -50,7 +70,17 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $request->validated();
+
+        $user = User::find($request->id);
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->contact_number = $request->contact_number;
+        $user->role_id = $request->role_id;
+        // $user->password = bcrypt($request->role_id);
+        $user->save();
+        return response(new UserResource($user), 201);
     }
 
     /**

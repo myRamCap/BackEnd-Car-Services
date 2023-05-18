@@ -18,4 +18,13 @@ class Client extends Model
         'contact_number',
         'address'
     ];
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'remember_token',
+    ];
 }

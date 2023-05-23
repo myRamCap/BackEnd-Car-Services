@@ -15,8 +15,6 @@ class ServiceCenterController extends Controller
 
     public function getall () {
         $service_center = ServiceCenter::get();
-        // $id = $service_center->id;
-        // $services = ServiceCenterService::where('service_center_id', $service_center['id'])->get();
         foreach ($service_center as $service_center) {
             $services = ServiceCenterService::join('services', 'services.id', '=', 'service_center_services.service_id')
                         ->join('services_logos', 'services_logos.id', '=', 'services.image_id')
@@ -99,6 +97,7 @@ class ServiceCenterController extends Controller
         $service_logo->province = $request->province;
         $service_logo->longitude = $request->longitude;
         $service_logo->latitude = $request->latitude;
+        $service_logo->facility = $request->facility;
         $service_logo->branch_manager_id = $request->branch_manager_id;
         $service_logo->image = $request->image;
         $service_logo->save();

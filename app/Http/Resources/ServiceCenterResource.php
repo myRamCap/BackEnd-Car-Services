@@ -26,6 +26,7 @@ class ServiceCenterResource extends JsonResource
             'province' => $this->province,
             'longitude' => $this->longitude,
             'latitude' => $this->latitude,
+            'facility' => $this->facility,
             'branch_manager_id' => $this->branch_manager_id,
             'image' => $this->image,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),

@@ -24,7 +24,7 @@ class OtpController extends Controller
                 $removeToken->delete();
                 
                 $user_ID = $is_activated['id'];
-                $role = $is_activated['role'];
+                $role = $is_activated['role_id'];
                 $user = $is_activated['first_name']." ".$is_activated['last_name'];
                 $token = $is_activated->createToken('main')->plainTextToken;
                 return response(compact('user','token','role', 'user_ID')); 

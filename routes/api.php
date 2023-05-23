@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\ClientController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OTP\OtpController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\ServiceCenterBookingController;
@@ -39,7 +40,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('/service_center/timeslot', ServiceCenterTimeSlotController::class);
     Route::resource('/service_center/booking', ServiceCenterBookingController::class);
     Route::resource('/client', ClientController::class);
-    // Route::resource('/booking', BookingController::class);
+    Route::resource('/notification', NotificationController::class);
 
 
     Route::get('/corporate_account', [UserController::class, 'corporate']);

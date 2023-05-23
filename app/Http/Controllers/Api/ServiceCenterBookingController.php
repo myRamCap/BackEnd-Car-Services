@@ -7,7 +7,9 @@ use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Http\Resources\ServiceCenterBookingResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ServiceCenterBookingController extends Controller
 {
@@ -64,10 +66,39 @@ class ServiceCenterBookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookingRequest $request)
+    public function store(Request $request)
     {
 
-        $data = $request->validated();
+        // $data = $request->validated();
+
+
+        $validator = Validator::make($request->all(), [
+            'client_id' => 'required|integer',
+            'vehicle_id' => 'required|integer',
+            'services_id' => 'required|integer',
+            'service_center_id' => 'required|integer',
+            'status' => 'required|string',
+            'booking_date' => 'required|string',
+            'time' => 'required|string',
+            'notes' => 'required|string',
+        ]);
+
+        if ($validator->fails()){
+            return response($validator->errors(), 422);
+        }
+
+        $data = [
+            'client_id' => $request->client_id,
+            'vehicle_id' => $request->vehicle_id,
+            'services_id' => $request->services_id,
+            'service_center_id' => $request->service_center_id,
+            'status' => $request->status,
+            'booking_date' => $request->booking_date,
+            'time' => $request->time,
+            'notes' => $request->notes,
+        ];
+
+
         // $booking = Booking::create($data);
         $time_encode = DB::select("select count(a.time) as time 
                 from time_slots a

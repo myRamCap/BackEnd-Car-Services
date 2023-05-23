@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,4 +24,8 @@ Route::get('/email', function () {
 
 Route::get('/phone', function () {
     return view('phone');
+});
+
+Route::get('/linkstorage', function() {
+    Artisan::call('storage:link');
 });

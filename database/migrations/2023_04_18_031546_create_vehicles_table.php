@@ -16,7 +16,7 @@ return new class extends Migration
             $table->bigInteger('client_id');
             $table->string('vehicle_name');
             $table->string('chassis_number')->nullable();
-            $table->string('contact_number');
+            $table->string('contact_number')->nullable();
             $table->string('make')->nullable();
             $table->string('model')->nullable();
             $table->integer('year')->nullable();

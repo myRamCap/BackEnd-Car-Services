@@ -21,6 +21,7 @@ class ServiceCenter extends Model
         'province',
         'longitude',
         'latitude',
+        'facility',
         'branch_manager_id',
         // 'image',
     ];

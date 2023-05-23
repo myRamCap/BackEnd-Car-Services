@@ -7,6 +7,8 @@ use App\Models\Vehicle;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
 use App\Http\Resources\VehicleResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class VehicleController extends Controller
 {
@@ -44,9 +46,36 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreVehicleRequest $request)
+    public function store(Request $request)
     {
-        $data = $request->validated();
+        $validator = Validator::make($request->all(), [
+            'client_id' => 'required|integer',
+            'vehicle_name' => 'required|string',
+            'chassis_number' => 'required|string',
+            'contact_number' => 'required|string',
+            'make' => 'required|string',
+            'model' => 'required|string',
+            'year' => 'required|integer',
+            'image' => 'string|required',
+            'notes' => 'string|required',
+        ]);
+
+        if ($validator->fails()){
+            return response($validator->errors(), 422);
+        }
+
+        $data = [
+            'client_id' => $request->client_id,
+            'vehicle_name' => $request->vehicle_name,
+            'chassis_number' => $request->chassis_number,
+            'contact_number' => $request->contact_number,
+            'make' => $request->make,
+            'model' => $request->model,
+            'year' => $request->year,
+            'image' => $request->image,
+            'notes' => $request->notes,
+        ];
+
         $service_center = Vehicle::create($data);
         return response(new VehicleResource($service_center), 201);
     }

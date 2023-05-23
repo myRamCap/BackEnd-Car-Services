@@ -197,7 +197,7 @@
                                                                         <tr>
                                                                             <td width="10"></td>
                                                                             <td align="center">
-                                                                                <a href="{{ config('pleb.mail.instagram_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Instagram.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                                <a href="{{ config('pleb.mail.instagram_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('/public/images/Instagram.png') }}" width="36" border="0"       alt="icon"></a>
                                                                             </td>
                                                                             <td width="10"></td>
                                                                         </tr>
@@ -210,7 +210,7 @@
                                                                         <tr>
                                                                             <td width="10"></td>
                                                                             <td align="center">
-                                                                                <a href="{{ config('pleb.mail.twitter_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Twitter.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                                <a href="{{ config('pleb.mail.twitter_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ URL::asset('assets/img/emails/Twitter.png') }}" width="36" border="0"       alt="icon"></a>
                                                                             </td>
                                                                             <td width="10"></td>
                                                                         </tr>

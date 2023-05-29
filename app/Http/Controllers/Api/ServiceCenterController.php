@@ -6,15 +6,50 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreServiceCenterRequest;
 use App\Http\Requests\UpdateServiceCenterRequest;
 use App\Http\Resources\ServiceCenterResource;
+use App\Models\ManageUser;
 use App\Models\ServiceCenter;
 use App\Models\ServiceCenterService;
 use App\Models\TimeSlot;
+use App\Models\User;
+use App\Models\UserRestriction;
 
 class ServiceCenterController extends Controller
 {
 
-    public function getall () {
+    public function corporate($id) {
+        return ServiceCenterResource::collection(
+            ServiceCenter::where('corporate_manager_id', $id)->get()
+        ); 
+    }
+
+    public function getCategory($category) {
+
+        $service_centers = ServiceCenter::where('category', $category)->get();
+        $serviceCenterData = [];
+
+        foreach ($service_centers as $service_center) {
+            $services = ServiceCenterService::join('services', 'services.id', '=', 'service_center_services.service_id')
+                        ->join('services_logos', 'services_logos.id', '=', 'services.image_id')
+                        ->select('service_center_services.id', 'services.name', 'services.details', 'services_logos.image_url', 'service_center_services.estimated_time', 'service_center_services.estimated_time_desc' )
+                        ->where('service_center_id', $service_center['id'])
+                        ->get();
+            $timeslot = TimeSlot::where('service_center_id', $service_center['id'])->get();
+ 
+
+             $serviceCenterData[] = [
+                'service_center' => $service_center,
+                'services' => $services,
+                'timeSlot' => $timeslot
+            ];
+        }
+
+        return response(['service_centers' => $serviceCenterData], 202);
+
+    }
+
+    public function getall() {
         $service_center = ServiceCenter::get();
+        $serviceCenterData = [];
         foreach ($service_center as $service_center) {
             $services = ServiceCenterService::join('services', 'services.id', '=', 'service_center_services.service_id')
                         ->join('services_logos', 'services_logos.id', '=', 'services.image_id')
@@ -23,15 +58,14 @@ class ServiceCenterController extends Controller
             $timeslot = TimeSlot::where('service_center_id', $service_center['id'])->get();
  
 
-            return response([
-                'service_center' => 
-                    [
-                        $service_center,
-                        'services' => $services,
-                        'timeSlot' => $timeslot
-                    ]
-           ], 202);
+            $serviceCenterData[] = [
+                $service_center,
+                'services' => $services,
+                'timeSlot' => $timeslot    
+            ];
         }
+
+        return response(['service_centers' => $serviceCenterData], 202);
        
     }
 
@@ -40,10 +74,7 @@ class ServiceCenterController extends Controller
      */
     public function index()
     {
-        return ServiceCenterResource::collection(
-            ServiceCenter::orderBy('id','desc')->get()
-            // ServiceCenter::join('services_logos', 'services_logos.id', '=', 'services.id')->orderBy('services.id','desc')->get()
-         ); 
+        
     }
 
     /**
@@ -59,17 +90,48 @@ class ServiceCenterController extends Controller
      */
     public function store(StoreServiceCenterRequest $request)
     {
-        $data = $request->validated();
-        $service_center = ServiceCenter::create($data);
-        return response(new ServiceCenterResource($service_center), 201);
+        $service_center = ServiceCenter::where('corporate_manager_id', $request->corporate_manager_id)->count();
+        $restriction = UserRestriction::where('user_id', $request->corporate_manager_id)->first();
+
+        if ($service_center == $restriction['allowed_sc']) {
+            return response([
+                'errors' => [ 'restriction' => ['Not allowed to create another Service Center']]
+            ], 422);
+        } else {
+            $data = $request->validated();
+            $service_center = ServiceCenter::create($data);
+
+            return response(new ServiceCenterResource($service_center), 201);
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(ServiceCenter $serviceCenter)
+    public function show($id)
     {
-        //
+        $user = User::where('id', $id)->first();
+        
+        if ($user['role_id'] == 1) {
+            return ServiceCenterResource::collection(
+                ServiceCenter::orderBy('id','desc')->get()
+            ); 
+        } else if ($user['role_id'] == 2) {
+            return ServiceCenterResource::collection(
+                ServiceCenter::where('corporate_manager_id', $id)->orderBy('id','desc')->get()
+            ); 
+        } else if ($user['role_id'] == 3 || $user['role_id'] == 4) {
+            $service_center = ManageUser::where('user_id', $id)->first();
+
+            return ServiceCenterResource::collection(
+                ServiceCenter::where('id', $service_center['service_center_id'])->orderBy('id','desc')->get()
+            ); 
+        }
+
+        // return ServiceCenterResource::collection(
+        //     ServiceCenter::where('corporate_manager_id', $id)->orderBy('id','desc')->get()
+        //     // ServiceCenter::join('services_logos', 'services_logos.id', '=', 'services.id')->orderBy('services.id','desc')->get()
+        //  ); 
     }
 
     /**
@@ -98,7 +160,7 @@ class ServiceCenterController extends Controller
         $service_logo->longitude = $request->longitude;
         $service_logo->latitude = $request->latitude;
         $service_logo->facility = $request->facility;
-        $service_logo->branch_manager_id = $request->branch_manager_id;
+        $service_logo->corporate_manager_id = $request->corporate_manager_id;
         $service_logo->image = $request->image;
         $service_logo->save();
         return response(new ServiceCenterResource($service_logo), 201);

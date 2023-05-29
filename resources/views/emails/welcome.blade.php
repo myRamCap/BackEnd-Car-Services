@@ -114,7 +114,7 @@
                                 </tr>
                                 <tr>
                                     <td align="center" class="center-text">
-                                        <img style="width:190px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Logo-RC.png') }}" width="190" border="0"       alt="intro">
+                                        <img style="width:190px;border:0px;display: inline!important;" src="{{ asset('storage/images/Logo-RC.png') }}" width="190" border="0"       alt="intro">
                                     </td>
                                 </tr>
                                 <tr>
@@ -184,7 +184,7 @@
                                                                         <tr>
                                                                             <td width="10"></td>
                                                                             <td align="center">
-                                                                                <a href="{{ config('pleb.mail.facebook_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Facebook.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                                <a href="{{ config('pleb.mail.facebook_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('storage/images/Facebook.png') }}" width="36" border="0"       alt="icon"></a>
                                                                             </td>
                                                                             <td width="10"></td>
                                                                         </tr>
@@ -197,7 +197,7 @@
                                                                         <tr>
                                                                             <td width="10"></td>
                                                                             <td align="center">
-                                                                                <a href="{{ config('pleb.mail.instagram_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('/public/images/Instagram.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                                <a href="{{ config('pleb.mail.instagram_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('storage/images/Instagram.png') }}" width="36" border="0"       alt="icon"></a>
                                                                             </td>
                                                                             <td width="10"></td>
                                                                         </tr>
@@ -210,7 +210,7 @@
                                                                         <tr>
                                                                             <td width="10"></td>
                                                                             <td align="center">
-                                                                                <a href="{{ config('pleb.mail.twitter_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ URL::asset('assets/img/emails/Twitter.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                                <a href="{{ config('pleb.mail.twitter_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('storage/images/Twitter.png') }}" width="36" border="0"       alt="icon"></a>
                                                                             </td>
                                                                             <td width="10"></td>
                                                                         </tr>
@@ -223,7 +223,7 @@
                                                                         <tr>
                                                                             <td width="10"></td>
                                                                             <td align="center">
-                                                                                <a href="{{ config('pleb.mail.pinterest_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('assets/img/emails/Pinterest.png') }}" width="36" border="0"       alt="icon"></a>
+                                                                                <a href="{{ config('pleb.mail.pinterest_url') }}"><img style="width:36px;border:0px;display: inline!important;" src="{{ asset('storage/images/Pinterest.png') }}" width="36" border="0"       alt="icon"></a>
                                                                             </td>
                                                                             <td width="10"></td>
                                                                         </tr>
@@ -255,7 +255,8 @@
                                 </tr>
                                 <tr>
                                     <td class="center-text"  align="center" style="font-family:'Poppins',Arial,Helvetica,sans-serif;font-size:14px;line-height:24px;font-weight:400;font-style:normal;color:#6e6e6e;text-decoration:none;letter-spacing:0px;">
-                                        <a href="mailto:{{ config('pleb.mail.info_email') }}" style="color:#6e6e6e;"><span>{{ config('pleb.mail.info_email') }}</span></a> - <a href="{{ url('/') }}"    style="color:#6e6e6e;"><span>{{ config('pleb.app_name.name') }}</span></a>
+                                        <a href="mailto:{{ config('pleb.mail.info_email') }}" style="color:#6e6e6e;"><span>{{ config('pleb.mail.info_email') }}</span></a> 
+                                        {{-- - <a href="{{ url('/') }}"    style="color:#6e6e6e;"><span>{{ config('pleb.app_name.name') }}</span></a> --}}
                                     </td>
                                 </tr>
                                 <tr>
@@ -272,11 +273,11 @@
                                                         <table border="0" align="center" cellpadding="0" cellspacing="0" role="presentation">
                                                             <tr  >
                                                                 <td align="center">
-                                                                    <a href="{{config('pleb.mail.ios_url')}}"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="{{ asset('assets/img/emails/App-Store.png') }}" border="0"  alt="icon"></a>
+                                                                    <a href="{{config('pleb.mail.ios_url')}}"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="{{ asset('storage/images/App-Store.png') }}" border="0"  alt="icon"></a>
                                                                 </td>
                                                                 <td width="10" style="width: 10px;"></td>
                                                                 <td align="center">
-                                                                    <a href="{{config('pleb.mail.play_url')}}"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="{{ asset('assets/img/emails/Google-play.png') }}" border="0"  alt="icon"></a>
+                                                                    <a href="{{config('pleb.mail.play_url')}}"><img style="display:block;width:100%;max-width:117px;border:0px;"    width="117" src="{{ asset('storage/images/Google-play.png') }}" border="0"  alt="icon"></a>
                                                                 </td>
                                                             </tr>
                                                         </table>

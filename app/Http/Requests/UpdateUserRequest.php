@@ -21,12 +21,45 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $role_id = $this->role_id;
+
+        if ($role_id == 2) {
+            return [
+                'email' => 'required|email|unique:users,email,'.$this->id,
+                'first_name' => 'nullable',
+                'last_name' => 'nullable',
+                'contact_number' => 'required|string',
+                'role_id' => 'required|integer',
+                'allowed_sc' => 'required|integer',
+                'allowed_bm' => 'required|integer',
+            ];
+        } else if ($role_id == 3) {
+            return [
+                'email' => 'required|email|unique:users,email,'.$this->id,
+                'first_name' => 'nullable',
+                'last_name' => 'nullable',
+                'contact_number' => 'required|string',
+                'role_id' => 'required|integer',
+                'service_center_id' => 'required|integer',
+            ];
+        } else if ($role_id == 4) {
+            return [
+                'email' => 'required|email|unique:users,email,'.$this->id,
+                'first_name' => 'nullable',
+                'last_name' => 'nullable',
+                'contact_number' => 'required|string',
+                'role_id' => 'required|integer',
+                'branch_manager_id' => 'required|integer',
+            ];
+        }
+        
+    }
+
+    public function messages(): array
+    {
         return [
-            'email' => 'required|email|unique:users,email,'.$this->id,
-            'first_name' => 'nullable',
-            'last_name' => 'nullable',
-            'contact_number' => 'required|string',
-            'role_id' => 'required|integer',
+            'branch_manager_id' => 'The Branch Manager field is required.',
+            'service_center_id' => 'The Service Center field is required.',
         ];
     }
 }

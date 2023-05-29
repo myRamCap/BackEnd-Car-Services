@@ -17,7 +17,10 @@ class ServiceController extends Controller
     {
          return ServiceResource::collection(
             // Service::orderBy('id','desc')->get()
-            Service::join('services_logos', 'services_logos.id', '=', 'services.image_id')->orderBy('services.id','desc')->get()
+            Service::join('services_logos', 'services_logos.id', '=', 'services.image_id')
+                ->select('services.*','services_logos.image_url')
+                ->orderBy('services.id','desc')
+                ->get()
          ); 
     }
 

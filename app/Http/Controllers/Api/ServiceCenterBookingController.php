@@ -44,14 +44,17 @@ class ServiceCenterBookingController extends Controller
     public function index()
     {
         return ServiceCenterBookingResource::collection(
-            Booking::join('service_centers', 'service_centers.id', '=', 'bookings.service_center_id')
-                    ->join('services', 'services.id', '=', 'bookings.services_id')
-                    ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
-                    ->join('service_center_services', 'service_center_services.service_id', '=', 'bookings.services_id')
-                    ->join('clients', 'clients.id', '=', 'bookings.client_id')
-                    ->select('bookings.*', 'service_centers.name as service_center', 'services.name as service', 'vehicles.vehicle_name', 'service_center_services.estimated_time_desc', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
-                    ->orderBy('bookings.id','desc')
-                    ->get()
+            Booking::join('clients', 'clients.id', '=', 'bookings.client_id')
+                ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
+                ->join('services', 'services.id', '=', 'bookings.services_id')
+                ->join('service_centers', 'service_centers.id', '=', 'bookings.service_center_id')
+                ->join('service_center_services', function ($join) {
+                    $join->on('service_center_services.service_id', '=', 'services.id')
+                         ->on('service_center_services.service_center_id', '=', 'service_centers.id');
+                })
+                ->select('bookings.*', 'service_centers.name as service_center', 'services.name as service', 'vehicles.vehicle_name', 'service_center_services.estimated_time_desc', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+                ->orderBy('bookings.id','desc')
+                ->get()
         );
     }
 
@@ -68,9 +71,6 @@ class ServiceCenterBookingController extends Controller
      */
     public function store(Request $request)
     {
-
-        // $data = $request->validated();
-
 
         $validator = Validator::make($request->all(), [
             'client_id' => 'required|integer',
@@ -100,23 +100,53 @@ class ServiceCenterBookingController extends Controller
 
 
         // $booking = Booking::create($data);
-        $time_encode = DB::select("select count(a.time) as time 
-                from time_slots a
-                inner join (
-                    SELECT *
-                    FROM time_slots
-                    WHERE NOT EXISTS (
-                        select a.time, addtime(a.time, b.estimated_time) as estimated_time from bookings a
-                        inner join service_center_services b on a.services_id =  b.service_id
-                    WHERE (time_slots.time >= a.time  AND time_slots.time < addtime(a.time, b.estimated_time)  )
-                    and a.booking_date = '$request->booking_date'
-                    )
-                ) b on a.time=b.time
-                where a.time >= '$request->time' AND a.time < addtime('$request->time', '$request->estimated_time')"
+        // $time_encode = DB::select("select count(a.time) as time 
+        //         from time_slots a
+        //         inner join (
+        //             SELECT *
+        //             FROM time_slots
+        //             WHERE NOT EXISTS (
+        //                 select a.time, addtime(a.time, b.estimated_time) as estimated_time from bookings a
+        //                 inner join service_center_services b on a.services_id =  b.service_id
+        //             WHERE (time_slots.time >= a.time  AND time_slots.time < addtime(a.time, b.estimated_time)  )
+        //             and a.booking_date = '$request->booking_date'
+        //             )
+        //         ) b on a.time=b.time
+        //         where a.time >= '$request->time' AND a.time < addtime('$request->time', '$request->estimated_time')
+        //         AND a.service_center_id = '$request->service_center_id' "
+        // );
+
+        $time_encode = DB::select("SELECT count(time) as time
+        FROM time_slots
+        WHERE NOT EXISTS (
+            SELECT time FROM (
+                SELECT count(a.time) as counter, a.time, facility
+                FROM time_slots a 
+                JOIN (
+                    SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time, a.service_center_id, c.facility
+                    FROM bookings a 
+                    INNER JOIN service_center_services b ON a.services_id = b.service_id AND a.service_center_id = b.service_center_id
+                    INNER JOIN service_centers c ON a.service_center_id = c.id
+                    WHERE a.service_center_id = '$request->service_center_id' AND a.booking_date =  '$request->booking_date'
+                )  b ON a.time >= b.time and a.time < b.estimated_time
+                WHERE a.service_center_id = '$request->service_center_id'
+                GROUP BY a.time , facility
+            ) subquery
+            WHERE  counter = facility AND (time_slots.time >= time  AND time_slots.time <=  time )  
+        ) AND service_center_id = 1  
+        AND time >= '$request->time' AND time < addtime('$request->time', '$request->estimated_time')
+        ORDER BY time ASC"
         );
 
-        $time_check = DB::select(" select count(time) as time  from time_slots a
-        where a.time >= '$request->time'  AND a.time < addtime('$request->time', '$request->estimated_time')");
+        // $time_check = DB::select(" select     from time_slots a
+        // where a.time >= '$request->time'  AND a.time < addtime('$request->time', '$request->estimated_time')");
+
+        $time_check = DB::select("SELECT count(time) as time
+                FROM time_slots
+                WHERE 
+                (time >= '$request->time' AND time < addtime('$request->time', '$request->estimated_time')) 
+                AND service_center_id = '$request->service_center_id'
+        ");
  
         if ($time_encode == $time_check) {
             $booking = Booking::create($data);
@@ -133,16 +163,27 @@ class ServiceCenterBookingController extends Controller
      */
     public function show($id)
     {
-        return ServiceCenterBookingResource::collection(
-            Booking::join('service_centers', 'service_centers.id', '=', 'bookings.service_center_id')
-                    ->join('services', 'services.id', '=', 'bookings.services_id')
-                    ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
-                    ->join('service_center_services', 'service_center_services.service_id', '=', 'bookings.services_id')
-                    ->join('clients', 'clients.id', '=', 'bookings.client_id')
-                    ->select('bookings.*', 'service_centers.name as service_center', 'services.name as service', 'vehicles.vehicle_name', 'service_center_services.estimated_time_desc', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
-                    ->where('bookings.service_center_id',$id)
-                    ->orderBy('bookings.id','desc')
-                    ->get()
+        // return ServiceCenterBookingResource::collection(
+        //     Booking::join('service_centers', 'service_centers.id', '=', 'bookings.service_center_id')
+        //             ->join('services', 'services.id', '=', 'bookings.services_id')
+        //             ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
+        //             ->join('service_center_services', 'service_center_services.service_id', '=', 'bookings.services_id')
+        //             ->join('clients', 'clients.id', '=', 'bookings.client_id')
+        //             ->select('bookings.*', 'service_centers.name as service_center', 'services.name as service', 'vehicles.vehicle_name', 'service_center_services.estimated_time_desc', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+        //             ->where('bookings.service_center_id',$id)
+        //             ->orderBy('bookings.id','desc')
+        //             ->get()
+        // );
+         return ServiceCenterBookingResource::collection(
+            Booking::join('clients', 'clients.id', '=', 'bookings.client_id')
+                ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
+                ->join('services', 'services.id', '=', 'bookings.services_id')
+                ->join('service_centers', 'service_centers.id', '=', 'bookings.service_center_id')
+                ->join('service_center_services', 'service_center_services.service_id', '=', 'services.id')
+                ->select('bookings.*', 'service_centers.name as service_center', 'services.name as service', 'vehicles.vehicle_name', 'service_center_services.estimated_time_desc', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+                ->where('service_center_services.service_center_id',$id)
+                ->orderBy('bookings.id','desc')
+                ->get()
         );
     }
 

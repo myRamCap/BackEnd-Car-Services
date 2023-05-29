@@ -22,10 +22,10 @@ Route::get('/email', function () {
     return view('emails.welcome');
 });
 
-Route::get('/phone', function () {
-    return view('phone');
-});
+// Route::get('/phone', function () {
+//     return view('phone');
+// });
 
-Route::get('/linkstorage', function() {
-    Artisan::call('storage:link');
-});
+// Route::get('/linkstorage', function() {
+//     Artisan::call('storage:link');
+// });

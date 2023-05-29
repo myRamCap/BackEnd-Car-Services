@@ -25,12 +25,12 @@ class UpdateVehicleRequest extends FormRequest
             'client_id' => 'required|integer:vehicles,client_id,'.$this->id,
             'vehicle_name' => 'required|string',
             'chassis_number' => 'nullable|string',
-            'contact_number' => 'required|string',
-            'make' => 'nullable|string',
+            'contact_number' => 'nullable|string',
+            'make' => 'required|string',
             'model' => 'nullable|string',
             'year' => 'nullable|integer',
-            'image' => 'string|nullable',
-            'notes' => 'string|nullable',
+            'image' => 'nullable|nullable',
+            'notes' => 'nullable|nullable',
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\TimeSlot;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreTimeSlotRequest extends FormRequest
@@ -21,9 +22,24 @@ class StoreTimeSlotRequest extends FormRequest
      */
     public function rules(): array
     {
+        $serviceCenterId = $this->input('service_center_id');
+        $time = $this->input('time');
+
         return [
             'service_center_id' => 'required|integer',
-            'time' => 'required|string|unique:time_slots,time',
+            'time' => [
+            'required',
+            'string',
+            function ($attribute, $value, $fail) use ($serviceCenterId, $time) {
+                $existingRecord = TimeSlot::where('time', $time)
+                    ->where('service_center_id', '=', $serviceCenterId)
+                    ->first();
+
+                if ($existingRecord) {
+                    $fail("The time has already been takendd.");
+                }
+            },
+        ],
             'max_limit' => 'required|integer',
         ];
     }

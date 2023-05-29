@@ -32,7 +32,7 @@ class StoreServiceCenterRequest extends FormRequest
             'longitude' => 'required|numeric|regex:/^\d{0,4}\.\d{1,15}$/',
             'latitude' => 'required|numeric|regex:/^\d{0,4}\.\d{1,15}$/',
             'facility' => 'required|integer',
-            'branch_manager_id' => 'required|integer',
+            'corporate_manager_id' => 'required|integer',
             'image' => 'string|nullable',
         ];
     }

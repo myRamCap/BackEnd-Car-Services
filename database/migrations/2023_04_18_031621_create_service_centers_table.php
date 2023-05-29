@@ -23,7 +23,7 @@ return new class extends Migration
             $table->decimal('longitude', 19, 15);
             $table->decimal('latitude', 19, 15);
             $table->integer('facility');
-            $table->string('branch_manager_id');
+            $table->string('corporate_manager_id');
             $table->longText('image')->nullable();
             $table->timestamps();
         });

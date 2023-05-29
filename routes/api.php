@@ -41,14 +41,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('/service_center/booking', ServiceCenterBookingController::class);
     Route::resource('/client', ClientController::class);
     Route::resource('/notification', NotificationController::class);
+    Route::resource('/booking', BookingController::class);
 
 
+    
+    Route::get('/branchmanager/{id}', [UserController::class, 'branchmanager']);
+    Route::get('/corporateservicecenter/{id}', [ServiceCenterController::class, 'corporate']);
     Route::get('/corporate_account', [UserController::class, 'corporate']);
     Route::get('/upcomingbooking/{id}', [ServiceCenterBookingController::class, 'upcoming']);
     Route::get('/records/{id}', [ServiceCenterBookingController::class, 'records']);
     Route::get('/servicecenters', [ServiceCenterController::class, 'getall']);
-    Route::get('/roles', [RolesController::class, 'index']);
+    Route::get('/servicecenters/{category}', [ServiceCenterController::class, 'getCategory']);
+    Route::get('/roles/{id}', [RolesController::class, 'show']);
     Route::get('/service_center/timeslot/{id}/{year}/{month}/{day}',[ServiceCenterTimeSlotController::class, 'timeslot']);
+    Route::get('/bookings/service_center/services/{id}', [BookingController::class, 'services']);
+    Route::get('/bookings/{id}/{year}/{month}/{day}',[BookingController::class, 'timeslot']);
+    Route::get('/bookings/service_center/{id}',[BookingController::class, 'service_center']);
     Route::get('/service_center/vehicle/{id}', [VehicleController::class, 'vehicle']);
     // Route::get('/servicecenter/services', [ServiceCenterServicesController::class, 'test']);
     Route::post('/logout', [AuthController::class, 'logout']);

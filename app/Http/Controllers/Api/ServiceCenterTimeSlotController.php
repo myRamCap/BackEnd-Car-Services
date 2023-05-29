@@ -39,7 +39,7 @@ class ServiceCenterTimeSlotController extends Controller
         $carbonDate =  Carbon::parse($date);
 
         // $query = DB::select("SELECT id, service_center_id, time, max_limit, created_at  FROM time_slots
-        // WHERE NOT EXISTS (
+        // WHERE NOT EXISTS ( 
         //     SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time 
         //     FROM bookings a INNER JOIN service_center_services b ON a.services_id = b.id
         //     WHERE time_slots.time >= a.time  AND time_slots.time < addtime(a.time, b.estimated_time) 
@@ -48,25 +48,39 @@ class ServiceCenterTimeSlotController extends Controller
 
         // return($query);
 
-        return ServiceCenterTimSlotResource::collection(
-            DB::select("SELECT id, service_center_id, time, max_limit, created_at  FROM time_slots
-                        WHERE NOT EXISTS (
-                            SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time 
-                            FROM bookings a INNER JOIN service_center_services b ON a.services_id = b.service_id
-                            WHERE time_slots.time >= a.time  AND time_slots.time < addtime(a.time, b.estimated_time) 
-                            AND a.service_center_id = $id AND a.booking_date =  '$date'
-                        ) order by time ASC" )
-        );
- 
         // return ServiceCenterTimSlotResource::collection(
         //     DB::select("SELECT id, service_center_id, time, max_limit, created_at  FROM time_slots
         //                 WHERE NOT EXISTS (
         //                     SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time 
-        //                     FROM bookings a INNER JOIN service_center_services b ON a.services_id = b.id
+        //                     FROM bookings a INNER JOIN service_center_services b ON a.services_id = b.service_id
         //                     WHERE time_slots.time >= a.time  AND time_slots.time < addtime(a.time, b.estimated_time) 
-        //                     AND a.service_center_id = $id AND a.booking_date =  ?
-        //                 ) order by time ASC", [$carbonDate->format('Y-m-d')])
+        //                     AND a.service_center_id = $id AND a.booking_date =  '$date'
+        //                 ) order by time ASC" )
         // );
+
+        return ServiceCenterTimSlotResource::collection(
+            DB::select("SELECT id, service_center_id, time, max_limit, created_at
+            FROM time_slots
+            WHERE NOT EXISTS (
+                SELECT time FROM (
+                    SELECT count(a.time) as counter, a.time, facility
+                    FROM time_slots a 
+                    JOIN (
+                        SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time, a.service_center_id, c.facility
+                        FROM bookings a 
+                        INNER JOIN service_center_services b ON a.services_id = b.service_id AND a.service_center_id = b.service_center_id
+                        INNER JOIN service_centers c ON a.service_center_id = c.id
+                        WHERE a.service_center_id = $id AND a.booking_date =  '$date'
+                    )  b ON a.time >= b.time and a.time < b.estimated_time
+                    WHERE a.service_center_id = $id
+                    GROUP BY a.time, facility
+                ) subquery
+                WHERE  counter = facility AND (time_slots.time >= time  AND time_slots.time <=  time )  
+            ) AND service_center_id = $id  
+            ORDER BY time ASC" )
+        );
+ 
+    
     }
 
     /**

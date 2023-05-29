@@ -26,10 +26,10 @@ return [
     ],
 
     'mail' => [
-        'top_logo'          => 'https://www.simple-pleb.com/storage/uploads/logo/logo_big.svg',
-        'welcome_url'       => 'https://www.simple-pleb.com/login',
-        'street_address'    => 'address',
-        'phone_number'      => '(738) 479-6719',
+        // 'top_logo'          => 'https://www.simple-pleb.com/storage/uploads/logo/logo_big.svg',
+        // 'welcome_url'       => 'https://www.simple-pleb.com/login',
+        'street_address'    => 'Block 66 Lot 152 Phase 2 Cristo Rey Capas, Tarlac',
+        'phone_number'      => '(+63) 970-764-0646',
         'info_email'        => 'myramcap@gmail.com',
         'play_url'          => '111',
         'ios_url'           => '123',

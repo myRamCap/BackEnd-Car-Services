@@ -15,6 +15,12 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $createdAt = $this->created_at;
+
+        if (is_string($createdAt)) {
+            $createdAt = new \DateTime($createdAt);
+        }
+
         return [
             'id' => $this->id,
             'first_name' => $this->first_name,
@@ -25,8 +31,13 @@ class UserResource extends JsonResource
             'contact_number' => $this->contact_number,
             'role_id' => $this->role_id,
             'role_name' => $this->name,
+            'service_center_id' => $this->service_center_id ?? null,
+            'service_center' => $this->service_center ?? null,
+            'branch_manager' => $this->branch_manager ?? null,
+            'allowed_sc' => $this->allowed_sc ?? null,
+            'allowed_bm' => $this->allowed_bm ?? null,
             'image' => $this->image,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'created_at' => $createdAt->format('Y-m-d H:i:s'),
         ];
     }
 }

@@ -51,13 +51,13 @@ class VehicleController extends Controller
         $validator = Validator::make($request->all(), [
             'client_id' => 'required|integer',
             'vehicle_name' => 'required|string',
-            'chassis_number' => 'required|string',
-            'contact_number' => 'required|string',
+            'chassis_number' => 'nullable|string',
+            'contact_number' => 'nullable|string',
             'make' => 'required|string',
-            'model' => 'required|string',
-            'year' => 'required|integer',
-            'image' => 'string|required',
-            'notes' => 'string|required',
+            'model' => 'nullable|string',
+            'year' => 'nullable|integer',
+            'image' => 'nullable|required',
+            'notes' => 'nullable|required',
         ]);
 
         if ($validator->fails()){

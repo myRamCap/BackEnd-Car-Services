@@ -59,13 +59,13 @@ class ServiceCenterController extends Controller
  
 
             $serviceCenterData[] = [
-                $service_center,
+                'sevice_center' => $service_center,
                 'services' => $services,
-                'timeSlot' => $timeslot    
+                'timeSlot' => $timeslot 
             ];
         }
 
-        return response(['service_centers' => $serviceCenterData], 202);
+        return response( $serviceCenterData, 202);
        
     }
 
@@ -74,7 +74,9 @@ class ServiceCenterController extends Controller
      */
     public function index()
     {
-        
+        return ServiceCenterResource::collection(
+            ServiceCenter::orderBy('id','desc')->get()
+        ); 
     }
 
     /**

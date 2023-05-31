@@ -61,7 +61,11 @@ class VehicleController extends Controller
         ]);
 
         if ($validator->fails()){
-            return response($validator->errors(), 422);
+            if ($validator->fails()){
+                return response([
+                    'errors' =>  $validator->errors()
+               ], 422);
+            }
         }
 
         $data = [

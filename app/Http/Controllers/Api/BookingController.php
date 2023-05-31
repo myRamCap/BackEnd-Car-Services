@@ -166,7 +166,11 @@ class BookingController extends Controller
         ]);
 
         if ($validator->fails()){
-            return response($validator->errors(), 422);
+            if ($validator->fails()){
+                return response([
+                    'errors' =>  $validator->errors()
+               ], 422);
+            }
         }
 
         $data = [
@@ -229,7 +233,21 @@ class BookingController extends Controller
     {
         $user = User::where('id', $id)->first();
         
-        if ($user['role_id'] == 2) {
+        if ($user['role_id'] == 1) {
+            return BookingResource::collection(
+                Booking::join('clients', 'clients.id', '=', 'bookings.client_id')
+                    ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
+                    ->join('services', 'services.id', '=', 'bookings.services_id')
+                    ->join('service_centers', 'service_centers.id', '=', 'bookings.service_center_id')
+                    ->join('service_center_services', function ($join) {
+                        $join->on('service_center_services.service_id', '=', 'services.id')
+                            ->on('service_center_services.service_center_id', '=', 'bookings.service_center_id');
+                    })
+                    ->select('bookings.*', 'service_centers.name as service_center', 'services.name as service', 'vehicles.vehicle_name', 'service_center_services.estimated_time_desc', 'clients.first_name', 'clients.last_name', 'clients.contact_number')
+                    ->orderBy('bookings.id','desc')
+                    ->get()
+            );
+        } else if ($user['role_id'] == 2) {
             return BookingResource::collection(
                 Booking::join('clients', 'clients.id', '=', 'bookings.client_id')
                     ->join('vehicles', 'vehicles.id', '=', 'bookings.vehicle_id')
@@ -244,7 +262,7 @@ class BookingController extends Controller
                     ->orderBy('bookings.id','desc')
                     ->get()
             );
-        } else if ($user['role_id'] == 2) {
+        } else if ($user['role_id'] == 3 || $user['role_id'] == 4) {
             $sc_id = ManageUser::where('user_id', $id)->first();
             return BookingResource::collection(
                 Booking::join('clients', 'clients.id', '=', 'bookings.client_id')

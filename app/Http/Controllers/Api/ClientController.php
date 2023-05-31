@@ -7,6 +7,7 @@ use App\Http\Requests\ClientLoginRequest;
 use App\Http\Requests\ClientRegisterRequest;
 use App\Http\Requests\ClientVerifyRequest;
 use App\Http\Resources\ClientResource;
+use App\Http\Resources\ClientsResource;
 use App\Models\Client;
 use App\Models\ClientToken;
 use Illuminate\Http\Request;
@@ -15,9 +16,16 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
+    public function clients() {
+        return ClientsResource::collection(
+            Client::orderBy('first_name','asc')->get()
+            // ServiceCenter::join('services_logos', 'services_logos.id', '=', 'services.id')->orderBy('services.id','desc')->get()
+         ); 
+    }
+
     public function index() {
         return ClientResource::collection(
-            Client::orderBy('id','desc')->get()
+            Client::orderBy('first_name','asc')->get()
             // ServiceCenter::join('services_logos', 'services_logos.id', '=', 'services.id')->orderBy('services.id','desc')->get()
          ); 
     }

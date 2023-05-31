@@ -12,6 +12,17 @@ use Illuminate\Support\Facades\Mail;
 
 class OtpController extends Controller
 {
+    public function verify(Request $request) {
+        $get_token = $request->token;
+        $get_email = $request->email;
+        
+        $get_token = Verifytoken::where('token',$get_token)->where('email',$get_email)->where('is_activated', 0)->where('is_expired', 0)->first();
+        $get_token->is_activated = 1;
+        $get_token->save();
+        $user = User::where('email', $get_token->email)->first();
+        return response($user);
+    }
+
     public function verification(Request $request) {
         $get_token = $request->token;
         $get_email = $request->email;

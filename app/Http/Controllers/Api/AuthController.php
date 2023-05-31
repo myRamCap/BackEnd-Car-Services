@@ -34,6 +34,37 @@ class AuthController extends Controller
          return response($user);
     }
 
+    public function forgot_pwd_send($email){
+        // /** @var User $user */
+        // $user = Auth::user();
+
+        $user = User::where('email', $email)->first();
+
+        $validToken = rand(100000, 999999);
+        $get_token = new Verifytoken();
+        $get_token->token = $validToken;
+        $get_token->email = $user->email;
+        $get_token->save();
+        $get_user_email = $user->email;
+        $get_user_name = $user->name;
+        Mail::to($user->email)->send(new WelcomeMail($get_user_email, $validToken, $get_user_name));
+        return response($user);
+   }
+
+    public function forgot_password(Request $request) {
+        $email_check = User::where('email', $request->email)->first();
+
+        if ($email_check) {
+            $user_email = (new AuthController)->forgot_pwd_send($request->email);
+            return $user_email;
+        } else {
+            return response([
+                'errors' => [ 'email' => ['Email Address Not Found']]
+           ], 422);
+        }
+
+    }
+
     public function login(LoginRequest $request) {
         $credentials = $request->validated();
         $login_attemp = LoginAttempt::where('email', $request->email)->count();

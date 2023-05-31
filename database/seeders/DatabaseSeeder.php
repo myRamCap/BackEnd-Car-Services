@@ -12,16 +12,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::create([
-        //     'first_name' => 'Jhon Ray',
-        //     'middle_name' => 'Lorenzo',
-        //     'last_name' => 'Angcon',
-        //     'role_id' => '1',
-        //     'email' => 'jhonrayangcon1423@gmail.com',
-        //     'password' => bcrypt('welcome@123'),
-        //     'contact_number' => '123456789',
-        //     'image' => 'image_test'
-        // ]);
+        \App\Models\User::create([
+            'first_name' => 'Jhon Ray',
+            'middle_name' => 'Lorenzo',
+            'last_name' => 'Angcon',
+            'role_id' => '1',
+            'email' => 'jhonrayangcon1423@gmail.com',
+            'password' => bcrypt('welcome@123'),
+            'contact_number' => '123456789',
+            'image' => 'image_test'
+        ]);
 
         \App\Models\Role::insert([
             // [ 'name' => 'Super Admin', ['access' => '1', 'access' => '2'], 'created_at' => now(), 'updated_at' => now(), ],

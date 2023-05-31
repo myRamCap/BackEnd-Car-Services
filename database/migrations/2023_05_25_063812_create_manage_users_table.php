@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('manage_users', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id');
-            $table->bigInteger('manager_id');
+            $table->bigInteger('corporate_manager_id');
+            $table->bigInteger('branch_manager_id')->default(0);
             $table->bigInteger('service_center_id');
             $table->timestamps();
         });

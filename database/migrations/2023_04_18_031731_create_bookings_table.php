@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('status');
             $table->date('booking_date');
             $table->string('time');
+            $table->text('notes');
             $table->timestamps();
         });
     }

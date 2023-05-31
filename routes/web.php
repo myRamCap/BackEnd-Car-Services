@@ -18,12 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/email', function () {
-    return view('emails.welcome');
-});
+// Route::get('/email', function () {
+//     return view('emails.welcome');
+// });
 
-// Route::get('/phone', function () {
-//     return view('phone');
+// Route::get('/forgot_pwd', function () {
+//     return view('emails.forgot');
 // });
 
 // Route::get('/linkstorage', function() {

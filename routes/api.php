@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OTP\OtpController;
+use App\Http\Controllers\Api\PromotionController;
 use App\Http\Controllers\Api\RolesController;
 use App\Http\Controllers\Api\ServiceCenterBookingController;
 use App\Http\Controllers\Api\ServiceCenterController;
@@ -42,6 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('/client', ClientController::class);
     Route::resource('/notification', NotificationController::class);
     Route::resource('/booking', BookingController::class);
+    Route::resource('/promotion', PromotionController::class);
 
 
     
@@ -58,12 +60,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bookings/{id}/{year}/{month}/{day}',[BookingController::class, 'timeslot']);
     Route::get('/bookings/service_center/{id}',[BookingController::class, 'service_center']);
     Route::get('/service_center/vehicle/{id}', [VehicleController::class, 'vehicle']);
+    Route::get('/client_name', [ClientController::class, 'clients']);
     // Route::get('/servicecenter/services', [ServiceCenterServicesController::class, 'test']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
 
 Route::post('/changepwd/{id}', [AuthController::class, 'changePass']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/forgot_password', [AuthController::class, 'forgot_password']);
 
 // Client
 Route::post('/client_register', [ClientController::class, 'register']);
@@ -71,6 +75,7 @@ Route::post('/client_login', [ClientController::class, 'login']);
 Route::post('/client_verify', [ClientController::class, 'verification']);
 
 // Email Verification
+Route::post('/verifyotp_forgotpwd', [OtpController::class, 'verify']);
 Route::post('/verifyotp', [OtpController::class, 'verification']);
 Route::post('/expiredotp', [OtpController::class, 'expiredverification']);
 Route::post('/resendotp', [OtpController::class, 'resend']);

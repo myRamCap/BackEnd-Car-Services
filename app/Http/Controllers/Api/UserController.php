@@ -57,40 +57,43 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
-
-        if ($request->role_id == 2) {
-            $corporate_manager = ManageUser::join('users', 'users.id', '=', 'manage_users.user_id')
-                                ->where('manage_users.corporate_manager_id', $request->user_id)     
-                                ->where('manage_users.branch_manager_id', 0)
-                                ->count();
-            $restriction = UserRestriction::where('user_id', $request->user_id)->first();
-
-            if ($corporate_manager == $restriction['allowed_bm']) {
-                return response([
-                    'errors' => [ 'restriction' => ['Not allowed to create another Branch Manager']]
-                ], 422);
-            }
-        } else {
             $data = $request->validated();
             $data['password'] = bcrypt('welcome@123');
-            $user = User::create($data);
+            
 
             if ($request->user_role == 1) { 
+                $user = User::create($data);
                 UserRestriction::create([
                     'user_id' => $user->id,
                     'allowed_sc' => $request->allowed_sc,
                     'allowed_bm' => $request->allowed_bm
                 ]);
             } else if ($request->user_role == 2) {
-                ManageUser::create([
-                    'user_id' => $user->id,
-                    'service_center_id' => $request->service_center_id,
-                    'corporate_manager_id' => $request->user_id,
-                    'branch_manager_id' => $request->branch_manager_id
-                ]);
+                $corporate_manager = ManageUser::join('users', 'users.id', '=', 'manage_users.user_id')
+                                ->where('manage_users.corporate_manager_id', $request->user_id)     
+                                ->where('manage_users.branch_manager_id', 0)
+                                ->count();
+                $restriction = UserRestriction::where('user_id', $request->user_id)->first();
+                $restriction_count = $restriction['allowed_bm'] ?? 0;
+    
+
+                if ($corporate_manager == $restriction_count) {
+                    return response([
+                        'errors' => [ 'restriction' => ['Not allowed to create another Branch Manager']]
+                    ], 422);
+                } else {
+                    $user = User::create($data);
+                    ManageUser::create([
+                        'user_id' => $user->id,
+                        'service_center_id' => $request->service_center_id,
+                        'corporate_manager_id' => $request->user_id,
+                        'branch_manager_id' => $request->branch_manager_id
+                    ]);
+                }
+                
             } else if ($request->user_role == 3) {
                 $corporate = ManageUser::where('user_id', $request->user_id)->first();
-
+                $user = User::create($data);
                 ManageUser::create([
                     'user_id' => $user->id,
                     'service_center_id' => $corporate['service_center_id'],
@@ -100,7 +103,6 @@ class UserController extends Controller
             }
 
             return response(new UserResource($user), 201);
-        }
     }
 
     /**

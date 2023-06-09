@@ -24,7 +24,7 @@ class UpdateTimeSlotRequest extends FormRequest
         return [
             'service_center_id' => 'required|integer',
             'time' => 'required|string|unique:time_slots,time,'.$this->id,
-            'max_limit' => 'required|integer',
+            // 'max_limit' => 'required|integer',
         ];
     }
 }

@@ -15,7 +15,6 @@ use App\Models\UserRestriction;
 
 class ServiceCenterController extends Controller
 {
-
     public function corporate($id) {
         return ServiceCenterResource::collection(
             ServiceCenter::where('corporate_manager_id', $id)->get()
@@ -23,7 +22,6 @@ class ServiceCenterController extends Controller
     }
 
     public function getCategory($category) {
-
         $service_centers = ServiceCenter::where('category', $category)->get();
         $serviceCenterData = [];
 
@@ -31,20 +29,31 @@ class ServiceCenterController extends Controller
             $services = ServiceCenterService::join('services', 'services.id', '=', 'service_center_services.service_id')
                         ->join('services_logos', 'services_logos.id', '=', 'services.image_id')
                         ->select('service_center_services.id', 'services.name', 'services.details', 'services_logos.image_url', 'service_center_services.estimated_time', 'service_center_services.estimated_time_desc' )
-                        ->where('service_center_id', $service_center['id'])
+                        ->where('service_center_id', $service_center->id)
                         ->get();
-            $timeslot = TimeSlot::where('service_center_id', $service_center['id'])->get();
+            $timeslot = TimeSlot::where('service_center_id', $service_center->id)->get();
  
+            //  $serviceCenterData[] = [
+            //     'service_center' => [
+            //         'data' => array_merge($service_center, ['services' => $services,
+            //         'timeSlot' => $timeslot
+            //         ])
+                    
+            //     ]
+                
+            // ];
 
-             $serviceCenterData[] = [
-                'service_center' => $service_center,
-                'services' => $services,
-                'timeSlot' => $timeslot
+            $serviceCenterData[] = [
+                'service_center' => [
+                    'data' => array_merge($service_center->toArray(), [
+                        'services' => $services,
+                        'timeSlot' => $timeslot
+                    ])
+                ]
             ];
         }
 
-        return response(['service_centers' => $serviceCenterData], 202);
-
+        return response($serviceCenterData, 202);
     }
 
     public function getall() {

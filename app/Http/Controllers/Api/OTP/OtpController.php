@@ -17,10 +17,18 @@ class OtpController extends Controller
         $get_email = $request->email;
         
         $get_token = Verifytoken::where('token',$get_token)->where('email',$get_email)->where('is_activated', 0)->where('is_expired', 0)->first();
-        $get_token->is_activated = 1;
-        $get_token->save();
-        $user = User::where('email', $get_token->email)->first();
-        return response($user);
+
+        if ($get_token) {
+            $get_token->is_activated = 1;
+            $get_token->save();
+            $user = User::where('email', $get_token->email)->first();
+            return response($user);
+        } else {
+            return response([
+                'message' => 'Invalid verification code'
+            ], 422);
+        }
+        
     }
 
     public function verification(Request $request) {
@@ -40,9 +48,9 @@ class OtpController extends Controller
                 $token = $is_activated->createToken('main')->plainTextToken;
                 return response(compact('user','token','role', 'user_ID')); 
             } else {
-                $user = User::where('email',$get_email)->where('is_activated', 0)->first(); 
-                $user->is_activated = 1;
-                $user->save();
+                // $user = User::where('email',$get_email)->where('is_activated', 0)->first(); 
+                // $user->is_activated = 1;
+                // $user->save();
                 $get_token->is_activated = 1;
                 $get_token->save();
                 $user = User::where('email', $get_token->email)->first();

@@ -25,7 +25,7 @@ class UpdateVehicleRequest extends FormRequest
             'client_id' => 'required|integer:vehicles,client_id,'.$this->id,
             'vehicle_name' => 'required|string',
             'chassis_number' => 'nullable|string',
-            'contact_number' => 'nullable|string',
+            // 'contact_number' => 'nullable|string',
             'make' => 'required|string',
             'model' => 'nullable|string',
             'year' => 'nullable|integer',

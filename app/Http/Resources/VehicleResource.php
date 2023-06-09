@@ -21,7 +21,7 @@ class VehicleResource extends JsonResource
             'client_name' => $this->first_name . " " . $this->last_name,
             'vehicle_name' => $this->vehicle_name,
             'chassis_number' => $this->chassis_number,
-            'contact_number' => $this->contact_number,
+            // 'contact_number' => $this->contact_number,
             'make' => $this->make,
             'model' => $this->model,
             'year' => $this->year,

@@ -77,7 +77,7 @@ class ServiceCenterBookingController extends Controller
             'vehicle_id' => 'required|integer',
             'services_id' => 'required|integer',
             'service_center_id' => 'required|integer',
-            'status' => 'required|string',
+            'status' => 'nullable|string',
             'booking_date' => 'required|string',
             'time' => 'required|string',
             'notes' => 'required|string',
@@ -96,7 +96,7 @@ class ServiceCenterBookingController extends Controller
             'vehicle_id' => $request->vehicle_id,
             'services_id' => $request->services_id,
             'service_center_id' => $request->service_center_id,
-            'status' => $request->status,
+            'status' => 'Up Coming',
             'booking_date' => $request->booking_date,
             'time' => $request->time,
             'notes' => $request->notes,
@@ -137,7 +137,7 @@ class ServiceCenterBookingController extends Controller
                 GROUP BY a.time , facility
             ) subquery
             WHERE  counter = facility AND (time_slots.time >= time  AND time_slots.time <=  time )  
-        ) AND service_center_id = 1  
+        ) AND service_center_id = '$request->service_center_id'  
         AND time >= '$request->time' AND time < addtime('$request->time', '$request->estimated_time')
         ORDER BY time ASC"
         );

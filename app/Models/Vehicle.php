@@ -15,7 +15,7 @@ class Vehicle extends Model
         'client_id',
         'vehicle_name',
         'chassis_number',
-        'contact_number',
+        // 'contact_number',
         'make',
         'model',
         'year',

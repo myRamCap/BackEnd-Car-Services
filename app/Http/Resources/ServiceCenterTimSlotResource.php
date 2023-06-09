@@ -10,7 +10,7 @@ class ServiceCenterTimSlotResource extends JsonResource
     public static $wrap = false;
     /**
      * Transform the resource into an array.
-     *
+     * 
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -19,8 +19,9 @@ class ServiceCenterTimSlotResource extends JsonResource
             'id' => $this->id,
             'service_center_id' => $this->service_center_id,
             'time' => $this->time,
-            'max_limit' => $this->max_limit,
+            // 'max_limit' => $this->max_limit,
             'created_at' => $this->created_at,
+            'date_created' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

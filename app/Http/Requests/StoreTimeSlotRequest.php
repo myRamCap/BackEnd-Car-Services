@@ -36,11 +36,11 @@ class StoreTimeSlotRequest extends FormRequest
                     ->first();
 
                 if ($existingRecord) {
-                    $fail("The time has already been takendd.");
+                    $fail("The time has already been taken.");
                 }
             },
         ],
-            'max_limit' => 'required|integer',
+            // 'max_limit' => 'required|integer',
         ];
     }
 }

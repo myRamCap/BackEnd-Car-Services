@@ -14,7 +14,7 @@ class TimeSlot extends Model
     protected $fillable = [
         'service_center_id',
         'time',
-        'max_limit',
+        // 'max_limit',
     ];
 }
  

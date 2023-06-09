@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    public function email_send(){
+    public function email_send($email){
          /** @var User $user */
          $user = Auth::user();
 
@@ -124,7 +124,7 @@ class AuthController extends Controller
                 $removeToken->delete();
                 $removeToken = LoginAttempt::where('email', $request->email);
                 $removeToken->delete();
-                $user_email = (new AuthController)->email_send();
+                $user_email = (new AuthController)->email_send($request->email);
                 return $user_email;
             }
              
@@ -133,7 +133,7 @@ class AuthController extends Controller
             $removeToken->delete();
             $removeToken = LoginAttempt::where('email', $request->email);
             $removeToken->delete();
-            $user_email = (new AuthController)->email_send();
+            $user_email = (new AuthController)->email_send($request->email);
             return $user_email;
         }   
     }
@@ -147,6 +147,7 @@ class AuthController extends Controller
 
         $get_user = User::where('id',$request->id)->firstOrFail();
         $get_user->password = $data['password'];
+        $get_user->is_activated = 1;
         $get_user->save();
 
         $user_ID = $get_user['id'];

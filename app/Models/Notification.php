@@ -12,8 +12,10 @@ class Notification extends Model
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
-        'corporate_id',
-        'service_center_id',
+        'corporate_account_id',
+        'category',
+        // 'corporate_id',
+        'service_center',
         'datefrom',
         'dateto',
         'title',

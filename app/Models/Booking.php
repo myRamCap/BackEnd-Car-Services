@@ -13,6 +13,7 @@ class Booking extends Model
 
     protected $fillable = [
         'client_id',
+        'reference_number',
         'vehicle_id',
         'services_id',
         'service_center_id',
@@ -21,5 +22,6 @@ class Booking extends Model
         'booking_date',
         'time',
         'notes',
+        'updated_by',
     ];
 }

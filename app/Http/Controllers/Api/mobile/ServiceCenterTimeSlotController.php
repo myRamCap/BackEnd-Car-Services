@@ -58,19 +58,19 @@ class ServiceCenterTimeSlotController extends Controller
         // );
 
         return ServiceCenterTimSlotResource::collection(
-            DB::select("SELECT id, service_center_id, time, max_limit, created_at
+            DB::select("SELECT id, service_center_id, time, created_at
             FROM time_slots
             WHERE NOT EXISTS (
                 SELECT time FROM (
                     SELECT count(a.time) as counter, a.time, facility
                     FROM time_slots a 
                     JOIN (
-                        SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time, a.service_center_id, c.facility
+                        SELECT a.time, SUBTIME( addtime(a.time, b.estimated_time), '00:30:00') as estimated_time, a.service_center_id, c.facility
                         FROM bookings a 
                         INNER JOIN service_center_services b ON a.services_id = b.service_id AND a.service_center_id = b.service_center_id
                         INNER JOIN service_centers c ON a.service_center_id = c.id
                         WHERE a.service_center_id = $id AND a.booking_date =  '$date'
-                    )  b ON a.time >= b.time and a.time < b.estimated_time
+                    )  b ON a.time >= b.time and a.time <= b.estimated_time
                     WHERE a.service_center_id = $id
                     GROUP BY a.time, facility
                 ) subquery

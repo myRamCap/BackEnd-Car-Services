@@ -23,30 +23,30 @@ class DatabaseSeeder extends Seeder
         //     'image' => 'image_test'
         // ]);
 
-        \App\Models\Client::insert([
-            [ 
-                'first_name' => 'Jhon', 
-                'last_name' => 'Ray', 
-                'email' => 'jhonray@email.com', 
-                'contact_number' => '1235456', 
-                'address' => 'lalam akasya', 
-                'is_activated' => '1', 
-                'remember_token' => null, 
-                'created_at' => now(), 
-                'updated_at' => now(), 
-            ],
-            [ 
-                'first_name' => 'Randy', 
-                'last_name' => 'Organ', 
-                'email' => 'randy@email.com', 
-                'contact_number' => '12354256', 
-                'address' => 'lalam kwayan', 
-                'is_activated' => '1', 
-                'remember_token' => null, 
-                'created_at' => now(), 
-                'updated_at' => now(), 
-            ],
-        ]);
+        // \App\Models\Client::insert([
+        //     [ 
+        //         'first_name' => 'Jhon', 
+        //         'last_name' => 'Ray', 
+        //         'email' => 'jhonray@email.com', 
+        //         'contact_number' => '1235456', 
+        //         'address' => 'lalam akasya', 
+        //         'is_activated' => '1', 
+        //         'remember_token' => null, 
+        //         'created_at' => now(), 
+        //         'updated_at' => now(), 
+        //     ],
+        //     [ 
+        //         'first_name' => 'Randy', 
+        //         'last_name' => 'Organ', 
+        //         'email' => 'randy@email.com', 
+        //         'contact_number' => '12354256', 
+        //         'address' => 'lalam kwayan', 
+        //         'is_activated' => '1', 
+        //         'remember_token' => null, 
+        //         'created_at' => now(), 
+        //         'updated_at' => now(), 
+        //     ],
+        // ]);
 
         // \App\Models\Role::insert([
         //     // [ 'name' => 'Super Admin', ['access' => '1', 'access' => '2'], 'created_at' => now(), 'updated_at' => now(), ],
@@ -78,6 +78,27 @@ class DatabaseSeeder extends Seeder
         //         'updated_at' => now(), 
         //     ],
         // ]);
+
+        $startTime = strtotime('00:00');
+        $endTime = strtotime('23:30');
+        $interval = 30 * 60; // 30 minutes in seconds
+
+        $timeSlots = [];
+        $currentTimestamp = $startTime;
+
+        while ($currentTimestamp <= $endTime) {
+            $time = date('H:i', $currentTimestamp);
+
+            $timeSlots[] = [
+                'time' => $time,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            $currentTimestamp += $interval;
+        }
+
+        \App\Models\Time::insert($timeSlots);
 
         // \App\Models\User::factory(10)->create();
 

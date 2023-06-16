@@ -13,8 +13,11 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('corporate_id')->nullable();
-            $table->bigInteger('service_center_id')->nullable();
+            $table->bigInteger('corporate_account_id');
+            $table->string('category');
+            // $table->bigInteger('corporate_id')->nullable();
+            // $table->bigInteger('service_center_id')->nullable();
+            $table->json('service_center')->nullable();
             $table->date('datefrom');
             $table->date('dateto');
             $table->string('title')->nullable();

@@ -21,14 +21,22 @@ class StoreNotificationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'corporate_id' => 'required_without:service_center_id|integer|nullable',
-            'service_center_id' => 'required_without:corporate_id|integer|nullable',
+        $category = $this->input('category');
+        return [ 
+            'category' => 'required|string',
+            'service_center' => ($category == 'SELECTED') ? 'required|array' : 'nullable',
             'datefrom' => 'required|string',
             'dateto' => 'required|string',
             'title' => 'required|string',
             'content' => 'required|string',
             'image_url' => 'required|string'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'category.required' => 'You need to select "ALL SERVICE CENTER" or "CHOOSE SERVICE CENTER"',
         ];
     }
 

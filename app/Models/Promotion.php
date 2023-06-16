@@ -12,6 +12,7 @@ class Promotion extends Model
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
+        'corporate_account_id',
         'category',
         'client',
         'datefrom',

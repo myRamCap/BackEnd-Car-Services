@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('corporate_account_id');
             $table->string('category');
             $table->json('client')->nullable();
             $table->date('datefrom');

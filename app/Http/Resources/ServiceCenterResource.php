@@ -17,6 +17,7 @@ class ServiceCenterResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'reference_number' => $this->reference_number,
             'name' => $this->name,
             'category' => $this->category,
             'country' => $this->country,

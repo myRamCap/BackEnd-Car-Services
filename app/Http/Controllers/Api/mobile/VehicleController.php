@@ -24,7 +24,7 @@ class VehicleController extends Controller
             'model' => 'nullable|string',
             'year' => 'nullable|integer',
             'image' => 'nullable|required',
-            'notes' => 'nullable|required',
+            'notes' => 'nullable',
         ]);
 
         if ($validator->fails()){

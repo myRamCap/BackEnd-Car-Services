@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->bigInteger('service_center_id');
             $table->string('time');
-            $table->integer('max_limit')->nullable();
             $table->timestamps();
         });
     }

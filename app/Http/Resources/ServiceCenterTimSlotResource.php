@@ -21,7 +21,7 @@ class ServiceCenterTimSlotResource extends JsonResource
             'time' => $this->time,
             // 'max_limit' => $this->max_limit,
             'created_at' => $this->created_at,
-            'date_created' => $this->created_at->format('Y-m-d H:i:s'),
+            'date_created' => $this->created_at ,
         ];
     }
 }

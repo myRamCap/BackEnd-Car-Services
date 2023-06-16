@@ -14,13 +14,15 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('client_id');
+            $table->string('reference_number', 255)->nullable();
             $table->bigInteger('vehicle_id');
             $table->bigInteger('services_id');
             $table->bigInteger('service_center_id');
             $table->string('status');
             $table->date('booking_date');
             $table->string('time');
-            $table->text('notes');
+            $table->text('notes')->nullable();
+            $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -39,7 +39,7 @@ class ServiceCenterTimeSlotController extends Controller
         $carbonDate =  Carbon::parse($date);
 
         return ServiceCenterTimSlotResource::collection(
-            DB::select("SELECT id, service_center_id, time, max_limit, created_at
+            DB::select("SELECT id, service_center_id, time, created_at
             FROM time_slots
             WHERE NOT EXISTS (
                 SELECT time FROM (

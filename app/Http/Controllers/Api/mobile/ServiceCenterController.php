@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class ServiceCenterController extends Controller
 {
+    public function getdays($id) {
+        return ServiceCenterResource::collection(
+            ServiceCenter::where('corporate_manager_id', $id)->get()
+        ); 
+    }
+
     public function corporate($id) {
         return ServiceCenterResource::collection(
             ServiceCenter::where('corporate_manager_id', $id)->get()
@@ -39,7 +45,7 @@ class ServiceCenterController extends Controller
             ];
         }
 
-        return response($serviceCenterData, 202);
+        return response($serviceCenterData, 200);
     }
 
     public function getall() {
@@ -60,6 +66,6 @@ class ServiceCenterController extends Controller
             ];
         }
 
-        return response( $serviceCenterData, 202);
+        return response( $serviceCenterData, 200);
     }
 }

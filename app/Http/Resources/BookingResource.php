@@ -18,6 +18,7 @@ class BookingResource extends JsonResource
         return [
             'id' => $this->id,
             'client_id' => $this->client_id,
+            'reference_number' => $this->reference_number,
             'client_name' => $this->first_name . " " . $this->last_name,
             'vehicle_id' => $this->vehicle_id,
             'vehicle_name' => $this->vehicle_name,
@@ -31,6 +32,8 @@ class BookingResource extends JsonResource
             'time' => $this->time,
             'estimated_time_desc' => $this->estimated_time_desc,
             'notes' => $this->notes,
+            'updated_by' => $this->fn . " " . $this->ln,
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

@@ -110,14 +110,16 @@ class UserController extends Controller
         $user = User::where('id', $id)->first();
 
         if ($user['role_id'] === 1) {
+            // DB::enableQueryLog();
             return UserResource::collection(
                 User::join('roles', 'roles.id', '=', 'users.role_id')
                 ->join('user_restrictions', 'user_restrictions.user_id', '=', 'users.id')
                 ->select('users.*', 'roles.name',  'user_restrictions.allowed_bm', 'user_restrictions.allowed_sc')
-                ->where('users.role_id', 2)
+                ->where('users.role_id', '=', 2)
                 ->orderBy('users.id','desc')->get()
             ); 
-        }else if ($user['role_id'] === 2) {
+            // return DB::getQueryLog();
+        }else if ($user['role_id'] == 2) {
             return UserResource::collection(
                DB::select("SELECT a.*, b.name, d.id as service_center_id, d.name as service_center, concat(e.first_name, ' ', e.last_name) as branch_manager
                     FROM users a
@@ -131,7 +133,7 @@ class UserController extends Controller
                     LEFT JOIN users e ON c.branch_manager_id = e.id")
             ); 
         }
-        else if ($user['role_id'] === 3) {
+        else if ($user['role_id'] == 3) {
             return UserResource::collection(
                DB::select("SELECT a.*, b.name
                     FROM users a
@@ -142,7 +144,7 @@ class UserController extends Controller
                         WHERE branch_manager_id = $id
                     ) c ON a.id = c.user_id")
             ); 
-        }else if ($user['role_id'] === 4) {
+        }else if ($user['role_id'] == 4) {
             return UserResource::collection(
                DB::select("SELECT a.*, b.name
                     FROM users a

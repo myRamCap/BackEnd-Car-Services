@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('service_centers', function (Blueprint $table) {
             $table->id();
+            $table->string('reference_number')->nullable();
             $table->string('name');
             $table->string('category');
             $table->string('country');

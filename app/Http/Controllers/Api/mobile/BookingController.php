@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\mobile;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceCenterBookingResource;
 use App\Models\Booking;
+use App\Models\ServiceCenter;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -14,8 +16,25 @@ class BookingController extends Controller
     /**
      * Display the upcoming booking of the client .
      */
+    public function upcoming24hrs($id) {
+        $query = DB::select("SELECT a.reference_number, b.vehicle_name, c.name AS services, d.name AS service_center, a.booking_date, a.time, a.client_id
+                        FROM bookings a
+                        INNER JOIN vehicles b ON a.vehicle_id = b.id
+                        INNER JOIN services c ON a.services_id = c.id
+                        INNER JOIN service_centers d ON a.service_center_id = d.id
+                        WHERE a.client_id = $id AND (CONCAT(booking_date, ' ', time) >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+                        AND CONCAT(booking_date, ' ', time) <= DATE_ADD(NOW(), INTERVAL 24 HOUR) OR booking_date = DATE_ADD(CURDATE(), INTERVAL 1 DAY) )
+                        ORDER BY booking_date ASC
+                ");
+
+        return $query;
+    }
+
+    /**
+     * Display the upcoming booking of the client .
+     */
     public function upcoming($id) {
-        $query = DB::select("SELECT a.id, b.name as service_center, d.vehicle_name, c.name as services, a.booking_date, a.time  FROM bookings a
+        $query = DB::select("SELECT a.reference_number, b.name as service_center, d.vehicle_name, c.name as services, a.booking_date, a.time  FROM bookings a
                     INNER JOIN service_centers b ON a.service_center_id = b.id
                     INNER JOIN services c ON a.services_id = c.id
                     INNER JOIN vehicles d ON a.vehicle_id = d.id
@@ -26,7 +45,7 @@ class BookingController extends Controller
     }
 
     public function records($id) {
-        $query = DB::select("SELECT a.id, b.name as service_center, d.vehicle_name, c.name as services, a.booking_date, a.time, a.status  FROM bookings a
+        $query = DB::select("SELECT a.reference_number, b.name as service_center, d.vehicle_name, c.name as services, a.booking_date, a.time, a.status  FROM bookings a
                     INNER JOIN service_centers b ON a.service_center_id = b.id
                     INNER JOIN services c ON a.services_id = c.id
                     INNER JOIN vehicles d ON a.vehicle_id = d.id
@@ -71,7 +90,7 @@ class BookingController extends Controller
             'status' => 'nullable|string',
             'booking_date' => 'required|string',
             'time' => 'required|string',
-            'notes' => 'required|string',
+            'notes' => 'nullable',
         ]);
 
         if ($validator->fails()){
@@ -100,18 +119,18 @@ class BookingController extends Controller
                 SELECT count(a.time) as counter, a.time, facility
                 FROM time_slots a 
                 JOIN (
-                    SELECT a.time, addtime(a.time, b.estimated_time) as estimated_time, a.service_center_id, c.facility
+                    SELECT a.time, SUBTIME( addtime(a.time, b.estimated_time), '00:30:00') as estimated_time, a.service_center_id, c.facility
                     FROM bookings a 
                     INNER JOIN service_center_services b ON a.services_id = b.service_id AND a.service_center_id = b.service_center_id
                     INNER JOIN service_centers c ON a.service_center_id = c.id
                     WHERE a.service_center_id = '$request->service_center_id' AND a.booking_date =  '$request->booking_date'
-                )  b ON a.time >= b.time and a.time < b.estimated_time
+                )  b ON a.time >= b.time and a.time <= b.estimated_time
                 WHERE a.service_center_id = '$request->service_center_id'
                 GROUP BY a.time , facility
             ) subquery
             WHERE  counter = facility AND (time_slots.time >= time  AND time_slots.time <=  time )  
         ) AND service_center_id = '$request->service_center_id'  
-        AND time >= '$request->time' AND time < addtime('$request->time', '$request->estimated_time')
+        AND time >= '$request->time' AND time <= addtime('$request->time', '$request->estimated_time')
         ORDER BY time ASC"
         );
 
@@ -126,8 +145,15 @@ class BookingController extends Controller
         ");
  
         if ($time_encode == $time_check) {
+            $sc = ServiceCenter::where('id', '=', $request->service_center_id)->first();
+            $reference_number = $sc['reference_number'];
+
             $booking = Booking::create($data);
-            return response(new ServiceCenterBookingResource($booking), 201);
+            $reference_number = $reference_number.'-00'.$booking->id;
+            $booking = Booking::find($booking->id);
+            $booking->reference_number = $reference_number;
+            $booking->save();
+            return response(new ServiceCenterBookingResource($booking), 200);
         } else {
             return response([
                 'errors' => [ 'time' => ['The Time is not available for the Service. Please Select another time slot']]

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Api\admin\ClientController as AdminClientController;
 use App\Http\Controllers\Api\admin\NotificationController as AdminNotificationController;
+use App\Http\Controllers\Api\admin\OperationTimeController as AdminOperationTimeController;
 use App\Http\Controllers\Api\admin\PromotionController as AdminPromotionController;
 use App\Http\Controllers\Api\admin\RolesController as AdminRolesController;
 use App\Http\Controllers\Api\admin\ServiceCenterBookingController as AdminServiceCenterBookingController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\ClientController;
 use App\Http\Controllers\Api\mobile\BookingController as MobileBookingController;
 use App\Http\Controllers\Api\mobile\ClientController as MobileClientController;
+use App\Http\Controllers\Api\mobile\NotificationController as MobileNotificationController;
+use App\Http\Controllers\Api\mobile\promotionController as MobilePromotionController;
 use App\Http\Controllers\Api\mobile\ServiceCenterController as MobileServiceCenterController;
 use App\Http\Controllers\Api\mobile\ServiceCenterTimeSlotController as MobileServiceCenterTimeSlotController;
 use App\Http\Controllers\Api\mobile\ServiceController as MobileServiceController;
@@ -60,6 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('/web/servicecenter', AdminServiceCenterController::class);
     Route::resource('/web/vehicles', AdminVehicleController::class);
     Route::resource('/web/service_center/services', AdminServiceCenterServicesController::class);
+    Route::resource('/web/service_center/operationtime', AdminOperationTimeController::class);
     Route::resource('/web/service_center/timeslot', AdminServiceCenterTimeSlotController::class);
     Route::resource('/web/service_center/booking', AdminServiceCenterBookingController::class);
     Route::resource('/web/client', AdminClientController::class);
@@ -77,6 +81,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/web/corporateservicecenter/{id}', [AdminServiceCenterController::class, 'corporate']);
     Route::get('/web/roles/{id}', [AdminRolesController::class, 'show']);
     Route::get('/web/client_name', [AdminClientController::class, 'clients']);
+    Route::get('/web/service_center_name/{id}', [AdminServiceCenterController::class, 'service_center']);
 
     // Mobile
    Route::resource('/mobile/vehicles', MobileVehicleController::class);
@@ -84,10 +89,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
    Route::resource('/mobile/services', MobileServiceController::class);
    Route::resource('/mobile/booking', MobileBookingController::class);
 
+   Route::get('/mobile/editclient/{id}', [MobileClientController::class, 'edit_profile']);
+   Route::get('/mobile/notifications', [MobileNotificationController::class, 'notifications']);
+   Route::get('/mobile/promotions', [MobilePromotionController::class, 'promotions']);
    Route::get('/mobile/upcomingbooking/{id}', [MobileBookingController::class, 'upcoming']);
+   Route::get('/mobile/upcomingbooking24hrs/{id}', [MobileBookingController::class, 'upcoming24hrs']);
    Route::get('/mobile/records/{id}', [MobileBookingController::class, 'records']);
    Route::get('/mobile/servicecenters/{category}', [MobileServiceCenterController::class, 'getCategory']);
    Route::get('/mobile/servicecenters', [MobileServiceCenterController::class, 'getall']);
+   Route::get('/mobile/servicecenterdays/{id}', [MobileServiceCenterController::class, 'getdays']);
    Route::get('/mobile/service_center/timeslot/{id}/{year}/{month}/{day}',[MobileServiceCenterTimeSlotController::class, 'timeslot']);
    
 

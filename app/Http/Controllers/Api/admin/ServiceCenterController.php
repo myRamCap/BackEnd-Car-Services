@@ -16,6 +16,31 @@ use Illuminate\Http\Request;
 
 class ServiceCenterController extends Controller
 {
+    public function service_center($id) {
+        $user = User::where('id', $id)->first();
+        
+        if ($user['role_id'] == 1) {
+            return ServiceCenterResource::collection(
+                ServiceCenter::orderBy('id','desc')->get()
+            ); 
+        } else if ($user['role_id'] == 2) {
+            $query = ServiceCenter::select('id', 'name')
+                ->where('corporate_manager_id', $id)
+                ->orderBy('id','desc')
+                ->get();
+            return response([ 'data' => $query], 200);
+        } else if ($user['role_id'] == 3 || $user['role_id'] == 4) {
+            $service_center = ManageUser::where('user_id', $id)->first();
+
+                $query = ServiceCenter::select('id', 'name')
+                    ->where('id', $service_center['service_center_id'])
+                    ->orderBy('id','desc')
+                    ->get();
+
+                return response([ 'data' => $query], 200);
+        }
+    }
+
     public function corporate($id) {
         return ServiceCenterResource::collection(
             ServiceCenter::where('corporate_manager_id', $id)->get()
@@ -99,7 +124,22 @@ class ServiceCenterController extends Controller
             ], 422);
         } else {
             $data = $request->validated();
+            $municipality = $request->municipality;
+            
+            if (strpos($municipality, 'CITY OF ') !== false) {
+                $index = strpos($municipality, 'CITY OF ') + strlen('CITY OF ');
+                $shortCode = substr($municipality, $index, 3);
+            } else {
+                $shortCode = substr($municipality, 0, 3);
+            }
+
             $service_center = ServiceCenter::create($data);
+            $reference_number = $shortCode.'-'.$request->municipality_code;
+            $service_center = ServiceCenter::find($service_center->id);
+            $service_center->reference_number = $reference_number;
+            $service_center->save();
+            
+            // $service_center = ServiceCenter::create($data);
 
             return response(new ServiceCenterResource($service_center), 201);
         }
@@ -144,6 +184,15 @@ class ServiceCenterController extends Controller
     {
         $request->validated();
 
+        $municipality = $request->municipality;
+            
+        if (strpos($municipality, 'CITY OF ') !== false) {
+            $index = strpos($municipality, 'CITY OF ') + strlen('CITY OF ');
+            $shortCode = substr($municipality, $index, 3);
+        } else {
+            $shortCode = substr($municipality, 0, 3);
+        }
+
         $service_logo = ServiceCenter::find($request->id);
         $service_logo->name = $request->name;
         $service_logo->category = $request->category;
@@ -156,6 +205,7 @@ class ServiceCenterController extends Controller
         $service_logo->latitude = $request->latitude;
         $service_logo->facility = $request->facility;
         $service_logo->corporate_manager_id = $request->corporate_manager_id;
+        $service_logo->reference_number = $shortCode.'-'.$request->municipality_code;
         $service_logo->image = $request->image;
         $service_logo->save();
         return response(new ServiceCenterResource($service_logo), 201);

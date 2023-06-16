@@ -12,6 +12,13 @@ use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
+    public function edit_profile($id) {
+        $query = Client::select('id', 'first_name', 'last_name', 'address')
+                ->where('id', '=', $id)->first();
+
+        return $query;
+    }
+
     public function clients() {
         return ClientsResource::collection(
             Client::orderBy('first_name','asc')->get()
@@ -146,5 +153,26 @@ class ClientController extends Controller
         
         $user_email = (new ClientController)->otp_send($request->contact_number);
         return $user_email; 
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy($id)
+    {
+        $client = Client::find($id);
+
+        if (!$client) {
+            return response([
+                'message' => ['User not found.']
+           ], 422);
+        }
+    
+        $client->delete();
+
+        return response([
+            'message' => ['User deleted successfully.']
+       ], 422);
+    
     }
 }

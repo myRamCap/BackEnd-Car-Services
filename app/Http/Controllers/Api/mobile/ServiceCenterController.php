@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\mobile;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServiceCenterResource;
 use App\Models\ServiceCenter;
+use App\Models\ServiceCenterOperationTime;
 use App\Models\ServiceCenterService;
 use App\Models\TimeSlot;
 use Illuminate\Http\Request;
@@ -12,9 +13,10 @@ use Illuminate\Http\Request;
 class ServiceCenterController extends Controller
 {
     public function getdays($id) {
-        return ServiceCenterResource::collection(
-            ServiceCenter::where('corporate_manager_id', $id)->get()
-        ); 
+       $query = ServiceCenterOperationTime::select('service_center_id', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday')
+                        ->where('service_center_id', '=', $id)
+                        ->first();
+        return $query;
     }
 
     public function corporate($id) {

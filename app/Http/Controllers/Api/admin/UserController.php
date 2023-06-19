@@ -167,7 +167,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->contact_number = $request->contact_number;
         $user->role_id = $request->role_id;
-        $user->save();
+        $user->save(); 
         
         if ($request->user_role == 1) {
             $restriction = UserRestriction::where('user_id', $request->id)->first();

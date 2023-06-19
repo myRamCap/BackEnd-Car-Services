@@ -49,9 +49,9 @@ class ClientController extends Controller
 
         $ch = curl_init();
         $parameters = array(
-            'apikey' => 'a2c6431ca76cd7ecc56a36afd837dd9f', //Your API KEY
+            'apikey' => 'fb78b4c7aa9d8bc5d994a1b4b39f13a5', //Your API KEY
             'number' => $contact_number,
-            'message' => $validToken.' is you authentication code. for yur protection, do not share this code with anyone.',
+            'message' => $validToken.' is you authentication code. for your protection, do not share this code with anyone.',
         );
         curl_setopt( $ch, CURLOPT_URL,'https://semaphore.co/api/v4/messages' );
         curl_setopt( $ch, CURLOPT_POST, 1 );
@@ -156,6 +156,40 @@ class ClientController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'address' => 'required|string'
+        ]);
+
+        if ($validator->fails()){
+            if ($validator->fails()){
+                return response([
+                    'errors' =>  $validator->errors()
+               ], 422);
+            }
+        }
+
+        $client = Client::find($request->id);
+
+        if (!$client) {
+            return response([
+                'message' => ['User not found.']
+           ], 422);
+        }
+
+        $client = Client::find($request->id);
+        $client->first_name = $request->first_name;
+        $client->last_name = $request->last_name;
+        $client->address = $request->address;
+        $client->save();
+        return response(new ClientResource($client), 200);
+    }
+
+    /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
@@ -172,7 +206,7 @@ class ClientController extends Controller
 
         return response([
             'message' => ['User deleted successfully.']
-       ], 422);
+       ], 200);
     
     }
 }
